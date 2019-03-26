@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import main.model.ShapesModel;
+import main.model.command.add.AddShapeCmd;
 import main.model.shape.Point;
 import main.view.Paint;
 
@@ -20,6 +21,9 @@ public class PaintController {
 	public void handleMouseClick(MouseEvent e) {
 		Point point = new Point(e.getX(), e.getY(), Color.BLACK);
 		this.model.getShapes().add(point);
+		AddShapeCmd addShape = new AddShapeCmd(point, this.model);
+		addShape.execute();
+		
 		this.paint.getCanvas().repaint();
 	}
 
