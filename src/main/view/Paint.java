@@ -5,20 +5,33 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import main.controller.PaintController;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import main.model.command.Command;
 
 public class Paint extends JFrame {
 
 	private PaintController controller;
 
+	/**
+	 * Panels
+	 */
 	private Canvas canvas = new Canvas();
 	private JPanel topCommandsPanel = new JPanel();
-	
+	private final JPanel bottomLogPanel = new JPanel();
+
+	/**
+	 * Lists
+	 */
+	private DefaultListModel<Command> logListModel = new DefaultListModel<>();
+	private JList<Command> commandList = new JList<>(logListModel);
+
 	/**
 	 * Undo Redo Navigation
 	 */
@@ -46,6 +59,7 @@ public class Paint extends JFrame {
 		});
 
 		this.topCommandsPanel.setBackground(Color.black);
+		this.bottomLogPanel.setBackground(Color.red);
 
 		mainPanel.add(this.topCommandsPanel, BorderLayout.NORTH);
 
@@ -58,7 +72,7 @@ public class Paint extends JFrame {
 				controller.undo();
 			}
 		});
-		
+
 		btnRedo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -68,11 +82,16 @@ public class Paint extends JFrame {
 
 		topCommandsPanel.add(btnUndo);
 		topCommandsPanel.add(btnRedo);
-		
+
 		this.setEnabledBtnUndo(false);
 		this.setEnabledBtnRedo(false);
-		
+
+		JScrollPane spLog = new JScrollPane();
+		spLog.setViewportView(this.commandList);
+		this.bottomLogPanel.add(spLog);
+
 		mainPanel.add(this.canvas, BorderLayout.CENTER);
+		mainPanel.add(this.bottomLogPanel, BorderLayout.SOUTH);
 
 	}
 
@@ -91,13 +110,17 @@ public class Paint extends JFrame {
 	public void setCanvas(Canvas canvas) {
 		this.canvas = canvas;
 	}
-	
+
 	public void setEnabledBtnUndo(boolean enabled) {
 		this.btnUndo.setEnabled(enabled);
 	}
-	
-	public void setEnabledBtnRedo(boolean enabled)  {
+
+	public void setEnabledBtnRedo(boolean enabled) {
 		this.btnRedo.setEnabled(enabled);
 	}
-	
+
+	public DefaultListModel<Command> getLogListModel() {
+		return this.logListModel;
+	}
+
 }

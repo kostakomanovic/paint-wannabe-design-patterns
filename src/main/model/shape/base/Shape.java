@@ -15,15 +15,14 @@ public abstract class Shape implements Cloneable {
 		this.color = color;
 		this.selected = selected;
 	}
-	
+
 	public abstract void draw(Graphics g);
-	
+
 	public abstract void select(Graphics g);
-	
+
 	public abstract boolean contains(int x, int y);
-	
+
 	public abstract Shape clone();
-	
 
 	public Color getColor() {
 		return color;
@@ -40,7 +39,10 @@ public abstract class Shape implements Cloneable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Shape [color=" + color + ", selected=" + selected + "]";
+	}
 
 }

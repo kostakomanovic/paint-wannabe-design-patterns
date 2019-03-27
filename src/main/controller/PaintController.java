@@ -35,11 +35,13 @@ public class PaintController {
 		command.execute();
 		this.commands.add(command);
 		this.currentCommandIndex++;
+		this.paint.getLogListModel().addElement(this.commands.get(this.currentCommandIndex));
 		this.setUndoRedoNavigation();
 	}
 
 	public void undo() {
 		this.commands.get(this.currentCommandIndex).unexecute();
+		this.paint.getLogListModel().removeElement(this.commands.get(this.currentCommandIndex));
 		this.currentCommandIndex--;
 		this.setUndoRedoNavigation();
 		this.repaint();
@@ -48,6 +50,7 @@ public class PaintController {
 	public void redo() {
 		this.currentCommandIndex++;
 		this.commands.get(currentCommandIndex).execute();
+		this.paint.getLogListModel().addElement(this.commands.get(this.currentCommandIndex));
 		this.setUndoRedoNavigation();
 		this.repaint();
 	}

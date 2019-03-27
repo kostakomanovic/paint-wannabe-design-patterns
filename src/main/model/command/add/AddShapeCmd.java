@@ -24,4 +24,11 @@ public class AddShapeCmd implements Command {
 		this.model.getShapes().remove(this.shape);
 	}
 
+	@Override
+	public String toString() {
+		return "AddShapeCmd [shape=" + shape + "]";
+	}
+	
+	
+
 }
