@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import main.io.LoadManager;
 import main.io.SaveManager;
 import main.io.in.LoadShapes;
+import main.io.out.SaveLog;
 import main.io.out.SaveShapes;
 import main.model.ShapesModel;
 import main.model.command.Command;
@@ -44,9 +45,9 @@ public class PaintController {
 	}
 
 	/**
-	 * Handles mouse click on save button
+	 * Handles mouse click on save canvas button
 	 */
-	public void handleSave() {
+	public void handleSaveCanvas() {
 		JFileChooser jFileChooser = new JFileChooser();
 		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			SaveManager saveManager = new SaveManager(new SaveShapes());
@@ -56,16 +57,35 @@ public class PaintController {
 	}
 	
 	/**
-	 * Handles mouse click on load button
+	 * Handles mouse click on save log button
+	 */
+	public void handleSaveLog() {
+		JFileChooser jFileChooser = new JFileChooser();
+		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+			SaveManager saveManager = new SaveManager(new SaveLog());
+			saveManager.save(new ArrayList<Object>(this.commands),
+					jFileChooser.getSelectedFile().getAbsolutePath());
+		}
+	}
+	
+	/**
+	 * Handles mouse click on load canvas button
 	 */
 	@SuppressWarnings("unchecked")
-	public void handleLoad() {
+	public void handleLoadCanvas() {
 		JFileChooser jFileChooser = new JFileChooser();
 		if(jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadShapes());
 			this.model.setShapes((List<Shape>)(Object)loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()));
 			this.repaint();
 		}
+	}
+	
+	/**
+	 * Handles mouse click on load log button
+	 */
+	public void handleLoadLog() {
+		
 	}
 
 	private void helpCommandExecution(Command command) {

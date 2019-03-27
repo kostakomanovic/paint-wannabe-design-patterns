@@ -13,7 +13,7 @@ public class SaveLog implements Save {
 		PrintWriter printWriter;
 		try {
 			printWriter = new PrintWriter(path);
-			objects.stream().forEach(command -> printWriter.write(command.toString()));
+			objects.stream().forEach(command -> printWriter.write(command.toString() + "\n"));
 			printWriter.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

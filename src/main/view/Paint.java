@@ -44,8 +44,12 @@ public class Paint extends JFrame {
 	private final JButton btnUndo = new JButton("Undo");
 	private final JMenuBar mbMain = new JMenuBar();
 	private final JMenu mnFile = new JMenu("File");
-	private final JMenuItem mnSave = new JMenuItem("Save...");
-	private final JMenuItem mnLoad = new JMenuItem("Load...");
+	private final JMenuItem mnSaveCanvas = new JMenuItem("Canvas");
+	private final JMenuItem mnLoadCanvas = new JMenuItem("Canvas");
+	private final JMenuItem mnSaveLog = new JMenuItem("Log");
+	private final JMenu mnSave = new JMenu("Save");
+	private final JMenu mnLoad = new JMenu("Load");
+	private final JMenuItem mnLoadLog = new JMenuItem("Log");
 
 	public Paint(int width, int height) {
 		this.setSize(520, 409);
@@ -105,20 +109,37 @@ public class Paint extends JFrame {
 		getContentPane().add(mbMain, BorderLayout.NORTH);
 		
 		mbMain.add(mnFile);
-		mnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.handleSave();
-			}
-		});
 		
 		mnFile.add(mnSave);
-		mnLoad.addActionListener(new ActionListener() {
+		mnSave.add(mnSaveLog);
+		mnSave.add(mnSaveCanvas);
+		
+		mnFile.add(mnLoad);
+		
+		mnLoad.add(mnLoadLog);
+		mnLoad.add(mnLoadCanvas);
+		mnLoadCanvas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				controller.handleLoad();
+				controller.handleLoadCanvas();
+			}
+		});
+		mnLoadLog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.handleLoadLog();
 			}
 		});
 		
-		mnFile.add(mnLoad);
+		mnSaveLog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.handleSaveLog();
+			}
+		});
+		
+		mnSaveCanvas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.handleSaveCanvas();
+			}
+		});
 
 	}
 
