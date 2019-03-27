@@ -2,12 +2,18 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import main.model.shape.base.Moveable;
 import main.model.shape.base.Shape;
 
-public class Line extends Shape implements Moveable {
+public class Line extends Shape implements Moveable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2044721333072167557L;
+	
 	private Point startingPoint;
 	private Point endingPoint;
 

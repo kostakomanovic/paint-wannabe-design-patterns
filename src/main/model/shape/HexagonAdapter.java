@@ -2,13 +2,19 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import hexagon.Hexagon;
 import main.model.shape.base.ArealShape;
 import main.model.shape.base.Moveable;
 
-public class HexagonAdapter extends ArealShape implements Moveable {
+public class HexagonAdapter extends ArealShape implements Moveable, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5270168233786654833L;
+	
 	private Hexagon hexagon;
 
 	public HexagonAdapter(Point center, int side, Color color, Color fillColor) {

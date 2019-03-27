@@ -2,6 +2,8 @@ package main.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -9,6 +11,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -37,6 +42,10 @@ public class Paint extends JFrame {
 	 */
 	private final JButton btnRedo = new JButton("Redo");
 	private final JButton btnUndo = new JButton("Undo");
+	private final JMenuBar mbMain = new JMenuBar();
+	private final JMenu mnFile = new JMenu("File");
+	private final JMenuItem mnSave = new JMenuItem("Save...");
+	private final JMenuItem mnLoad = new JMenuItem("Load...");
 
 	public Paint(int width, int height) {
 		this.setSize(520, 409);
@@ -92,6 +101,24 @@ public class Paint extends JFrame {
 
 		mainPanel.add(this.canvas, BorderLayout.CENTER);
 		mainPanel.add(this.bottomLogPanel, BorderLayout.SOUTH);
+		
+		getContentPane().add(mbMain, BorderLayout.NORTH);
+		
+		mbMain.add(mnFile);
+		mnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.handleSave();
+			}
+		});
+		
+		mnFile.add(mnSave);
+		mnLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.handleLoad();
+			}
+		});
+		
+		mnFile.add(mnLoad);
 
 	}
 

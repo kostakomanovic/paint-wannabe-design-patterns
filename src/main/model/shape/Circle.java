@@ -2,12 +2,18 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import main.model.shape.base.ArealShape;
 import main.model.shape.base.Moveable;
 
-public class Circle extends ArealShape implements Moveable {
+public class Circle extends ArealShape implements Moveable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8902684168259121145L;
+	
 	private Point center;
 	private int radius;
 

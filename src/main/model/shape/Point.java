@@ -2,6 +2,7 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import main.model.shape.base.Moveable;
 import main.model.shape.base.Shape;
@@ -11,8 +12,13 @@ import main.model.shape.base.Shape;
  * @author sebamed
  *
  */
-public class Point extends Shape implements Moveable {
+public class Point extends Shape implements Moveable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5770642039001983179L;
+	
 	private int x;
 	private int y;
 

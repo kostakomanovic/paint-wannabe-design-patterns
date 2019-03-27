@@ -2,11 +2,17 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import main.model.shape.base.Moveable;
 
-public class Rectangle extends Square implements Moveable {
+public class Rectangle extends Square implements Moveable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8466687855428681270L;
+	
 	private int height;
 
 	public Rectangle() {

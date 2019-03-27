@@ -2,12 +2,18 @@ package main.model.shape;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import main.model.shape.base.ArealShape;
 import main.model.shape.base.Moveable;
 
-public class Square extends ArealShape implements Moveable {
+public class Square extends ArealShape implements Moveable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4013006916658557219L;
+	
 	protected Point origin;
 	private int width;
 
