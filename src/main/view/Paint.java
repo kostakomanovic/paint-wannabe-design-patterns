@@ -82,14 +82,16 @@ public class Paint extends JFrame {
 		btnUndo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				controller.undo();
+				if (btnUndo.isEnabled())
+					controller.undo();
 			}
 		});
 
 		btnRedo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				controller.redo();
+				if (btnRedo.isEnabled())
+					controller.redo();
 			}
 		});
 
@@ -105,17 +107,17 @@ public class Paint extends JFrame {
 
 		mainPanel.add(this.canvas, BorderLayout.CENTER);
 		mainPanel.add(this.bottomLogPanel, BorderLayout.SOUTH);
-		
+
 		getContentPane().add(mbMain, BorderLayout.NORTH);
-		
+
 		mbMain.add(mnFile);
-		
+
 		mnFile.add(mnSave);
 		mnSave.add(mnSaveLog);
 		mnSave.add(mnSaveCanvas);
-		
+
 		mnFile.add(mnLoad);
-		
+
 		mnLoad.add(mnLoadLog);
 		mnLoad.add(mnLoadCanvas);
 		mnLoadCanvas.addActionListener(new ActionListener() {
@@ -128,13 +130,13 @@ public class Paint extends JFrame {
 				controller.handleLoadLog();
 			}
 		});
-		
+
 		mnSaveLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				controller.handleSaveLog();
 			}
 		});
-		
+
 		mnSaveCanvas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				controller.handleSaveCanvas();

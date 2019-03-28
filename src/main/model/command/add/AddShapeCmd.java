@@ -26,7 +26,8 @@ public class AddShapeCmd implements Command {
 
 	@Override
 	public String toString() {
-		return "AddShapeCmd [shape=" + shape + "]";
+		// command,shape
+		return "add," + shape;
 	}
 	
 	

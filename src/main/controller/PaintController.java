@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 
 import main.io.LoadManager;
 import main.io.SaveManager;
+import main.io.in.LoadLog;
 import main.io.in.LoadShapes;
 import main.io.out.SaveLog;
 import main.io.out.SaveShapes;
@@ -17,6 +18,7 @@ import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
 import main.model.shape.Point;
 import main.model.shape.base.Shape;
+import main.util.LogMapper;
 import main.view.Paint;
 
 public class PaintController {
@@ -85,7 +87,14 @@ public class PaintController {
 	 * Handles mouse click on load log button
 	 */
 	public void handleLoadLog() {
-		
+		JFileChooser jFileChooser = new JFileChooser();
+		if(jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+			LoadManager loadManager = new LoadManager(new LoadLog());
+			this.refreshCanvasAndLog();
+			this.commands = LogMapper.mapLogsToCommands(loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()), this.model);
+			this.setUndoRedoNavigation();
+			this.repaint();
+		}
 	}
 
 	private void helpCommandExecution(Command command) {
@@ -116,6 +125,23 @@ public class PaintController {
 		this.paint.setEnabledBtnUndo(this.currentCommandIndex > -1);
 		this.paint.setEnabledBtnRedo(this.currentCommandIndex < this.commands.size() - 1);
 		this.repaint();
+	}
+	
+	private void refreshCanvas() {
+		this.model.getShapes().clear();
+		this.repaint();
+	}
+	
+	private void refreshLog() {
+		this.commands.clear();
+		this.paint.getLogListModel().clear();
+		this.currentCommandIndex = -1;
+		this.repaint();
+	}
+	
+	private void refreshCanvasAndLog() {
+		this.refreshCanvas();
+		this.refreshLog();
 	}
 
 	private void repaint() {

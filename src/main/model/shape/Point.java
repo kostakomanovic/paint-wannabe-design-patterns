@@ -91,7 +91,8 @@ public class Point extends Shape implements Moveable, Serializable {
 
 	@Override
 	public String toString() {
-		return "Point [x=" + x + ", y=" + y + "]";
+		// point, x, y, r, g, b
+		return "point," + this.x  + "," + this.y + "," + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue();
 	}
 
 	@Override
