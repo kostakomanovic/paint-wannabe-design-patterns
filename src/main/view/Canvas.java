@@ -1,5 +1,6 @@
 package main.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -16,7 +17,7 @@ public class Canvas extends JPanel {
 	private ShapesModel model;
 	
 	public Canvas() {
-		System.out.println("daaa");
+		this.setBackground(Color.white);
 	}
 
 	public ShapesModel getModel() {

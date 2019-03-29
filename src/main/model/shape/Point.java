@@ -57,7 +57,7 @@ public class Point extends Shape implements Moveable, Serializable {
 	
 	@Override
 	public boolean contains(int x, int y) {
-		return this.distance(new Point(x, y)) < 5;
+		return this.distance(new Point(x, y)) <  5;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package main.controller;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -29,6 +30,9 @@ public class PaintController {
 	private List<Command> commands = new ArrayList<>();
 	private int currentCommandIndex = -1;
 
+	// TODO add constants
+	private String mode = "NORMAL";
+
 	public PaintController(ShapesModel model, Paint paint) {
 		this.model = model;
 		this.paint = paint;
@@ -40,10 +44,20 @@ public class PaintController {
 	 * @param e <MouseEvent>
 	 */
 	public void handleMouseClick(MouseEvent e) {
-		Point point = new Point(e.getX(), e.getY(), Color.BLACK);
-		AddShapeCmd addShape = new AddShapeCmd(point, this.model);
-		helpCommandExecution(addShape);
-		this.paint.getCanvas().repaint();
+
+		switch (this.mode) {
+		case "NORMAL":
+			Point point = new Point(e.getX(), e.getY(), Color.BLACK);
+			AddShapeCmd addShape = new AddShapeCmd(point, this.model);
+			helpCommandExecution(addShape);
+			this.paint.getCanvas().repaint();
+			break;
+		case "SELECT":
+			this.helpSelect(e.getX(), e.getY());
+		default:
+			break;
+		}
+
 	}
 
 	/**
@@ -57,7 +71,7 @@ public class PaintController {
 					jFileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
-	
+
 	/**
 	 * Handles mouse click on save log button
 	 */
@@ -65,36 +79,57 @@ public class PaintController {
 		JFileChooser jFileChooser = new JFileChooser();
 		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			SaveManager saveManager = new SaveManager(new SaveLog());
-			saveManager.save(new ArrayList<Object>(this.commands),
-					jFileChooser.getSelectedFile().getAbsolutePath());
+			saveManager.save(new ArrayList<Object>(this.commands), jFileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
-	
+
+	/**
+	 * Handles mouse click on select button
+	 */
+	public void handleStartSelect() {
+		this.mode = "SELECT";
+	}
+
 	/**
 	 * Handles mouse click on load canvas button
 	 */
 	@SuppressWarnings("unchecked")
 	public void handleLoadCanvas() {
 		JFileChooser jFileChooser = new JFileChooser();
-		if(jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadShapes());
-			this.model.setShapes((List<Shape>)(Object)loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()));
+			this.model.setShapes(
+					(List<Shape>) (Object) loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()));
 			this.repaint();
 		}
 	}
-	
+
 	/**
 	 * Handles mouse click on load log button
 	 */
 	public void handleLoadLog() {
 		JFileChooser jFileChooser = new JFileChooser();
-		if(jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadLog());
 			this.refreshCanvasAndLog();
-			this.commands = LogMapper.mapLogsToCommands(loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()), this.model);
+			this.commands = LogMapper
+					.mapLogsToCommands(loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()), this.model);
 			this.setUndoRedoNavigation();
 			this.repaint();
 		}
+	}
+	
+	private void helpSelect(int x, int y) {
+		Collections.reverse(this.model.getShapes());
+		this.model.getShapes().stream().forEach(shape -> {
+			if (shape.contains(x, y)) {
+				shape.setSelected(!shape.isSelected());
+				Collections.reverse(this.model.getShapes());
+				this.repaint();
+				return;
+			}
+		});
+		Collections.reverse(this.model.getShapes());
 	}
 
 	private void helpCommandExecution(Command command) {
@@ -126,19 +161,19 @@ public class PaintController {
 		this.paint.setEnabledBtnRedo(this.currentCommandIndex < this.commands.size() - 1);
 		this.repaint();
 	}
-	
+
 	private void refreshCanvas() {
 		this.model.getShapes().clear();
 		this.repaint();
 	}
-	
+
 	private void refreshLog() {
 		this.commands.clear();
 		this.paint.getLogListModel().clear();
 		this.currentCommandIndex = -1;
 		this.repaint();
 	}
-	
+
 	private void refreshCanvasAndLog() {
 		this.refreshCanvas();
 		this.refreshLog();
