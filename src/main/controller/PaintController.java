@@ -18,14 +18,17 @@ import main.io.out.SaveShapes;
 import main.model.ShapesModel;
 import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
+import main.model.command.edit.EditLineCmd;
 import main.model.command.edit.EditPointCmd;
 import main.model.command.z.DeleteShapeCmd;
+import main.model.shape.Line;
 import main.model.shape.Point;
 import main.model.shape.base.Shape;
 import main.util.LogMapper;
 import main.util.ShapesModelHelper;
 import main.util.constants.PaintMode;
 import main.view.Paint;
+import main.view.dialogs.edit.EditLineDialog;
 import main.view.dialogs.edit.EditPointDialog;
 
 public class PaintController extends Observable {
@@ -35,6 +38,8 @@ public class PaintController extends Observable {
 
 	private List<Command> commands = new ArrayList<>();
 	private int currentCommandIndex = -1;
+
+	private Point lineStartPoint;
 
 	// TODO add constants
 	private String mode = PaintMode.NORMAL;
@@ -51,11 +56,21 @@ public class PaintController extends Observable {
 	 */
 	public void handleMouseClick(MouseEvent e) {
 
-		if (this.mode.equals(PaintMode.NORMAL)) {
+		if (this.mode.equals(PaintMode.POINT)) {
 			Point point = new Point(e.getX(), e.getY(), Color.BLACK);
 			AddShapeCmd addShape = new AddShapeCmd(point, this.model);
 			helpCommandExecution(addShape);
-			this.paint.getCanvas().repaint();
+			this.repaint();
+		} else if (this.mode.equals(PaintMode.LINE)) {
+			if(this.lineStartPoint == null) {
+				this.lineStartPoint = new Point(e.getX(), e.getY(), Color.black);
+			} else {
+				Point lineEndPoint = new Point(e.getX(), e.getY(), Color.black);
+				Line line = new Line(this.lineStartPoint.clone(), lineEndPoint, Color.black);
+				this.lineStartPoint = null;
+				AddShapeCmd addShape = new AddShapeCmd(line, this.model);
+				this.helpCommandExecution(addShape);
+			}
 		} else if (this.mode.equals(PaintMode.SELECT)) {
 			this.helpSelect(e.getX(), e.getY());
 		}
@@ -88,8 +103,8 @@ public class PaintController extends Observable {
 	/**
 	 * Handles mouse click on select button
 	 */
-	public void handleStartSelect() {
-		this.mode = PaintMode.SELECT;
+	public void handleChangeMode(String mode) {
+		this.mode = mode;
 	}
 
 	/**
@@ -160,6 +175,15 @@ public class PaintController extends Observable {
 			dialog.setVisible(true);
 			if (dialog.getEditedShape() != null) {
 				Command command = new EditPointCmd(point, (Point) dialog.getEditedShape());
+				this.helpCommandExecution(command);
+			}
+		} else if (selectedShape instanceof Line) {
+			Line line = (Line) selectedShape;
+			EditLineDialog dialog = new EditLineDialog(this.paint);
+			dialog.setLine(line.clone());
+			dialog.setVisible(true);
+			if(dialog.getEditedShape() != null) {
+				Command command = new EditLineCmd(line, (Line) dialog.getEditedShape());
 				this.helpCommandExecution(command);
 			}
 		}

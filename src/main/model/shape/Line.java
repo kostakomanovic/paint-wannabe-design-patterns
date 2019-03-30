@@ -93,7 +93,12 @@ public class Line extends Shape implements Moveable, Serializable {
 	@Override
 	public void moveTo(int x, int y) {
 		this.getStartingPoint().moveTo(x, y);
-		this.getEndingPoint().moveFor(x - this.getStartingPoint().getX(),  y - this.getStartingPoint().getY());
+		this.getEndingPoint().moveTo(x - this.getStartingPoint().getX(),  y - this.getStartingPoint().getY());
+	}
+	
+	public void moveBothPoints(int x1, int y1, int x2, int y2) {
+		this.getStartingPoint().moveTo(x1, y1);
+		this.getEndingPoint().moveTo(x2, y2);
 	}
 
 	@Override
