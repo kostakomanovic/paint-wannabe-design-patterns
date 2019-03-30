@@ -26,8 +26,15 @@ import javax.swing.JToggleButton;
 import main.controller.PaintController;
 import main.model.command.Command;
 import main.model.shape.base.Shape;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Paint extends JFrame implements Observer {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -926357764508616835L;
 
 	private PaintController controller;
 
@@ -94,8 +101,10 @@ public class Paint extends JFrame implements Observer {
 				if(btnDelete.isEnabled()) controller.handleDelete();
 			}
 		});
+		
 
 		this.btnDelete.setEnabled(false);
+		
 		this.btnEdit.setEnabled(false);
 		
 		this.topCommandsPanel.setBackground(Color.black);
@@ -123,6 +132,13 @@ public class Paint extends JFrame implements Observer {
 					controller.redo();
 			}
 		});
+		
+		btnEdit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(btnEdit.isEnabled()) controller.handleEdit();
+			}
+		});
 
 		topCommandsPanel.add(btnUndo);
 		topCommandsPanel.add(btnRedo);
@@ -132,6 +148,8 @@ public class Paint extends JFrame implements Observer {
 				if(btnSelect.isEnabled()) controller.handleStartSelect();
 			}
 		});
+		
+		
 		
 		topCommandsPanel.add(btnSelect);
 		
