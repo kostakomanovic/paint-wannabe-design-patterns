@@ -132,14 +132,15 @@ public class PaintController extends Observable {
 
 	private void helpSelect(int x, int y) {
 		Collections.reverse(this.model.getShapes());
-		this.model.getShapes().stream().forEach(shape -> {
+		for(Shape shape : this.model.getShapes()) {
 			if (shape.contains(x, y)) {
 				shape.setSelected(!shape.isSelected());
 				Collections.reverse(this.model.getShapes());
 				this.repaint();
 				return;
-			}
-		});
+			}			
+		}
+
 		Collections.reverse(this.model.getShapes());
 
 		this.emitChangesToObservers();
