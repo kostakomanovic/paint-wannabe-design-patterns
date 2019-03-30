@@ -18,6 +18,7 @@ import main.io.out.SaveShapes;
 import main.model.ShapesModel;
 import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
+import main.model.command.z.DeleteShapeCmd;
 import main.model.shape.Point;
 import main.model.shape.base.Shape;
 import main.util.LogMapper;
@@ -118,6 +119,15 @@ public class PaintController extends Observable {
 			this.setUndoRedoNavigation();
 		}
 
+	}
+	
+	/**
+	 * Handles mouse click on delete button
+	 */
+	public void handleDelete() {
+		DeleteShapeCmd deleteCmd = new DeleteShapeCmd(this.model);
+		this.helpCommandExecution(deleteCmd);
+		this.emitChangesToObservers();
 	}
 
 	private void helpSelect(int x, int y) {

@@ -88,6 +88,12 @@ public class Paint extends JFrame implements Observer {
 		
 		ButtonGroup bgShapes = new ButtonGroup();
 		bgShapes.add(this.tbtnPoint);
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(btnDelete.isEnabled()) controller.handleDelete();
+			}
+		});
 
 		this.btnDelete.setEnabled(false);
 		this.btnEdit.setEnabled(false);

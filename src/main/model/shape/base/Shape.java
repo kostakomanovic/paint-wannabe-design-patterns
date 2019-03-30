@@ -6,14 +6,13 @@ import java.awt.Graphics;
 public abstract class Shape implements Cloneable {
 
 	private Color color;
-	private boolean selected;
+	private boolean selected = false;
 
 	public Shape() {
 	}
 
-	public Shape(Color color, boolean selected) {
+	public Shape(Color color) {
 		this.color = color;
-		this.selected = selected;
 	}
 
 	public abstract void draw(Graphics g);
