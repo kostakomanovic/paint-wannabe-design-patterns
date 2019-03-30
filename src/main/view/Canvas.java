@@ -18,6 +18,7 @@ public class Canvas extends JPanel {
 	
 	public Canvas() {
 		this.setBackground(Color.white);
+		this.setSize(400, 400);
 	}
 
 	public ShapesModel getModel() {

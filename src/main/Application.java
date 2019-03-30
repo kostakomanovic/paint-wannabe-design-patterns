@@ -7,7 +7,7 @@ import main.view.Paint;
 public class Application {
 
 	public static void main(String[] args) {
-		Paint paint = new Paint(400, 400);
+		Paint paint = new Paint(800, 600);
 		ShapesModel model = new ShapesModel();
 
 		paint.getCanvas().setModel(model);

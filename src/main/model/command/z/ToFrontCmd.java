@@ -19,7 +19,7 @@ public class ToFrontCmd implements Command {
 	@Override
 	public void execute() {
 		int shapeIndex = this.model.getShapes().indexOf(this.shape);
-		if (shapeIndex != -1 && shapeIndex != (this.model.getShapes().size() - 1)) {
+		if (shapeIndex != -1 && shapeIndex < (this.model.getShapes().size() - 1)) {
 			Collections.swap(this.model.getShapes(), shapeIndex, shapeIndex + 1);
 		}
 	}
@@ -30,7 +30,6 @@ public class ToFrontCmd implements Command {
 		if (shapeIndex > 0) {
 			Collections.swap(this.model.getShapes(), shapeIndex, shapeIndex - 1);
 		}
-		;
 	}
 
 	@Override

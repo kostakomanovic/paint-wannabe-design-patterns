@@ -29,7 +29,6 @@ public class EditHexagonDialog extends JDialog implements EditDialog {
 	public JTextField tfX, tfY, tfWidth;
 	public JButton btnFillColor, btnColor;
 	private HexagonAdapter hexagon;
-	private boolean sacuvano = false;
 
 	public EditHexagonDialog(JFrame parent) {
 		super(parent, "Edit hexagon", true);
@@ -176,11 +175,11 @@ public class EditHexagonDialog extends JDialog implements EditDialog {
 	}
 
 	private void color(JButton btnColor) {
-		JColorChooser jccUnutrasnjost = new JColorChooser();
-		Color colorUnutrasnjost = jccUnutrasnjost.showDialog(null, "Choose color", btnColor.getBackground());
+		JColorChooser jccColor = new JColorChooser();
+		Color color = jccColor.showDialog(null, "Choose color", btnColor.getBackground());
 
-		if (colorUnutrasnjost != null)
-			btnColor.setBackground(colorUnutrasnjost);
+		if (color != null)
+			btnColor.setBackground(color);
 
 	}
 
@@ -190,7 +189,7 @@ public class EditHexagonDialog extends JDialog implements EditDialog {
 	}
 
 	private void tooLargeNumberEntered(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "To je prevelik broj!", "Greska", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Number is too large!", "Error!", JOptionPane.ERROR_MESSAGE);
 		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
 	}
 

@@ -26,7 +26,11 @@ import main.model.command.edit.EditLineCmd;
 import main.model.command.edit.EditPointCmd;
 import main.model.command.edit.EditRectangleCmd;
 import main.model.command.edit.EditSquareCmd;
+import main.model.command.z.BringToBackCmd;
+import main.model.command.z.BringToFrontCmd;
 import main.model.command.z.DeleteShapeCmd;
+import main.model.command.z.ToBackCmd;
+import main.model.command.z.ToFrontCmd;
 import main.model.shape.Circle;
 import main.model.shape.HexagonAdapter;
 import main.model.shape.Line;
@@ -128,6 +132,7 @@ public class PaintController extends Observable {
 			this.helpSelect(e.getX(), e.getY());
 		}
 
+		this.emitChangesToObservers();
 	}
 
 	/**
@@ -158,6 +163,8 @@ public class PaintController extends Observable {
 	 */
 	public void handleChangeMode(String mode) {
 		this.mode = mode;
+		this.setChanged();
+		this.notifyObservers(mode);
 	}
 
 	/**
@@ -172,6 +179,40 @@ public class PaintController extends Observable {
 					(List<Shape>) (Object) loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()));
 			this.repaint();
 		}
+	}
+	
+	/**
+	 * Handles to front command
+	 */
+	public void handleToFront() {
+		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		ToFrontCmd command = new ToFrontCmd(selectedShape, this.model);
+		this.helpCommandExecution(command);
+	}
+	
+	/**
+	 * Handles to back command
+	 */
+	public void handleToBack() {
+		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		ToBackCmd command = new ToBackCmd(selectedShape, this.model);
+		this.helpCommandExecution(command);
+	}
+	
+	/**
+	 * Handles bring to front command
+	 */
+	public void handleBringToFront() {
+		BringToFrontCmd command = new BringToFrontCmd(this.model, this.currentCommandIndex);
+		this.helpCommandExecution(command);
+	}
+
+	/**
+	 * Handles bring to front command
+	 */
+	public void handleBringToBack() {
+		BringToBackCmd command = new BringToBackCmd(this.model, this.currentCommandIndex);
+		this.helpCommandExecution(command);
 	}
 
 	/**
@@ -192,10 +233,14 @@ public class PaintController extends Observable {
 	 * Handles mouse click on delete button
 	 */
 	public void handleDelete() {
-		DeleteShapeCmd deleteCmd = new DeleteShapeCmd(this.model);
-		this.helpCommandExecution(deleteCmd);
-		this.emitChangesToObservers();
-		this.deselectAll();
+		String[] options = {"Cancel", "Yes"};
+		int option = JOptionPane.showOptionDialog(this.paint, "Are you sure you want to delete selected shape/shapes?", "Delete shapes?", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		if(option == 1) {
+			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(this.model);
+			this.helpCommandExecution(deleteCmd);
+			this.emitChangesToObservers();
+			this.deselectAll();			
+		}
 	}
 
 	private void helpSelect(int x, int y) {
@@ -279,6 +324,7 @@ public class PaintController extends Observable {
 		}
 
 		this.deselectAll();
+		this.emitChangesToObservers();
 		this.repaint();
 	}
 

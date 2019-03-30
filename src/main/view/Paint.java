@@ -29,6 +29,9 @@ import main.model.shape.base.Shape;
 import main.util.constants.PaintMode;
 import javax.swing.SwingConstants;
 import java.awt.Component;
+import java.awt.SystemColor;
+import javax.swing.JLabel;
+import java.awt.event.MouseMotionAdapter;
 
 public class Paint extends JFrame implements Observer {
 
@@ -77,9 +80,17 @@ public class Paint extends JFrame implements Observer {
 	private final JPanel rightShapesPanel = new JPanel();
 	private final JButton btnEdit = new JButton("Edit");
 	private final JButton btnDelete = new JButton("Delete");
+	private final JPanel leftBringToPanel = new JPanel();
+	private final JButton btnToFront = new JButton("To Front");
+	private final JButton btnToBack = new JButton("To Back");
+	private final JButton btnBringToFront = new JButton("Bring to front");
+	private final JButton btnBringToBack = new JButton("Bring to Back");
+	private final JPanel logInfoPanel = new JPanel();
+	private final JLabel lblMode = new JLabel(" ");
+	private final JLabel lblXY = new JLabel(" ");
 
 	public Paint(int width, int height) {
-		this.setSize(520, 409);
+		this.setSize(698, 546);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -91,6 +102,12 @@ public class Paint extends JFrame implements Observer {
 		/**
 		 * canvas mouse event handler
 		 */
+		canvas.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				lblXY.setText("X: " + arg0.getX() + " Y: " + arg0.getY());
+			}
+		});
 		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -114,12 +131,14 @@ public class Paint extends JFrame implements Observer {
 		});
 
 		this.btnDelete.setEnabled(false);
-
 		this.btnEdit.setEnabled(false);
+		this.btnSelect.setEnabled(false);
+		this.enableBringToButtons(false);
 
 		this.topCommandsPanel.setBackground(Color.black);
 		this.bottomLogPanel.setBackground(Color.red);
 		this.rightShapesPanel.setBackground(Color.yellow);
+		this.leftBringToPanel.setBackground(Color.GREEN);
 
 		mainPanel.add(this.topCommandsPanel, BorderLayout.NORTH);
 
@@ -168,13 +187,24 @@ public class Paint extends JFrame implements Observer {
 
 		this.setEnabledBtnUndo(false);
 		this.setEnabledBtnRedo(false);
+		bottomLogPanel.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane spLog = new JScrollPane();
 		spLog.setViewportView(this.commandList);
-		this.bottomLogPanel.add(spLog);
+		this.bottomLogPanel.add(spLog, BorderLayout.CENTER);
 
 		mainPanel.add(this.canvas, BorderLayout.CENTER);
 		mainPanel.add(this.bottomLogPanel, BorderLayout.SOUTH);
+		logInfoPanel.setBackground(SystemColor.info);
+		
+		bottomLogPanel.add(logInfoPanel, BorderLayout.NORTH);
+		logInfoPanel.setLayout(new BorderLayout(0, 0));
+		lblMode.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		logInfoPanel.add(lblMode, BorderLayout.WEST);
+		lblXY.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		logInfoPanel.add(lblXY, BorderLayout.EAST);
 
 		mainPanel.add(rightShapesPanel, BorderLayout.EAST);
 
@@ -229,6 +259,44 @@ public class Paint extends JFrame implements Observer {
 			}
 		});
 		rightShapesPanel.add(tbtnHexagon);
+		
+		mainPanel.add(leftBringToPanel, BorderLayout.WEST);
+		leftBringToPanel.setLayout(new BoxLayout(leftBringToPanel, BoxLayout.Y_AXIS));
+		btnToFront.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(btnToFront.isEnabled()) controller.handleToFront();
+			}
+		});
+		
+		btnToBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(btnToBack.isEnabled()) controller.handleToBack();
+			}
+		});
+		
+		btnBringToFront.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(btnBringToFront.isEnabled()) controller.handleBringToFront();
+			}
+		});
+		
+		btnBringToBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(btnBringToBack.isEnabled()) controller.handleBringToBack();
+			}
+		});
+		
+		leftBringToPanel.add(btnToFront);
+		
+		leftBringToPanel.add(btnToBack);
+		
+		leftBringToPanel.add(btnBringToFront);
+		
+		leftBringToPanel.add(btnBringToBack);
 		
 		tbtnLine.addMouseListener(new MouseAdapter() {
 			@Override
@@ -299,6 +367,13 @@ public class Paint extends JFrame implements Observer {
 	public DefaultListModel<Command> getLogListModel() {
 		return this.logListModel;
 	}
+	
+	private void enableBringToButtons(boolean enable) {
+		this.btnToBack.setEnabled(enable);
+		this.btnToFront.setEnabled(enable);
+		this.btnBringToBack.setEnabled(enable);
+		this.btnBringToFront.setEnabled(enable);
+	}
 
 	/**
 	 * Callback function called when observable emits changes
@@ -306,6 +381,11 @@ public class Paint extends JFrame implements Observer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		
+		if(arg1 instanceof String) {
+			this.lblMode.setText(arg1.toString());
+		} else {
+			
 		int counter = 0;
 		List<Shape> shapes = (List<Shape>) arg1;
 		for (Shape shape : shapes) {
@@ -315,6 +395,9 @@ public class Paint extends JFrame implements Observer {
 
 		this.btnDelete.setEnabled(counter > 0);
 		this.btnEdit.setEnabled(counter == 1);
+		this.btnSelect.setEnabled(shapes.size() > 0);
+		this.enableBringToButtons(counter == 1);
+		}
 	}
 
 }
