@@ -6,8 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.channels.SelectableChannel;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -22,12 +25,9 @@ import javax.swing.JToggleButton;
 
 import main.controller.PaintController;
 import main.model.command.Command;
-import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.BoxLayout;
+import main.model.shape.base.Shape;
 
-public class Paint extends JFrame {
+public class Paint extends JFrame implements Observer {
 
 	private PaintController controller;
 
@@ -63,6 +63,8 @@ public class Paint extends JFrame {
 	private final JMenu mnLoad = new JMenu("Load");
 	private final JMenuItem mnLoadLog = new JMenuItem("Log");
 	private final JPanel rightShapesPanel = new JPanel();
+	private final JButton btnEdit = new JButton("Edit");
+	private final JButton btnDelete = new JButton("Delete");
 
 	public Paint(int width, int height) {
 		this.setSize(520, 409);
@@ -87,6 +89,9 @@ public class Paint extends JFrame {
 		ButtonGroup bgShapes = new ButtonGroup();
 		bgShapes.add(this.tbtnPoint);
 
+		this.btnDelete.setEnabled(false);
+		this.btnEdit.setEnabled(false);
+		
 		this.topCommandsPanel.setBackground(Color.black);
 		this.bottomLogPanel.setBackground(Color.red);
 		this.rightShapesPanel.setBackground(Color.yellow);
@@ -123,6 +128,10 @@ public class Paint extends JFrame {
 		});
 		
 		topCommandsPanel.add(btnSelect);
+		
+		topCommandsPanel.add(btnEdit);
+		
+		topCommandsPanel.add(btnDelete);
 
 		this.setEnabledBtnUndo(false);
 		this.setEnabledBtnRedo(false);
@@ -202,6 +211,22 @@ public class Paint extends JFrame {
 
 	public DefaultListModel<Command> getLogListModel() {
 		return this.logListModel;
+	}
+
+	/**
+	 * Callback function called when observable emits changes
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		int counter = 0;
+		List<Shape> shapes = (List<Shape>)arg1;
+		for(Shape shape : shapes) {
+			if(shape.isSelected()) counter++;
+		}
+		
+		this.btnDelete.setEnabled(counter > 0);
+		this.btnEdit.setEnabled(counter == 1);
 	}
 
 }

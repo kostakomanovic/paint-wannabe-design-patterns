@@ -14,6 +14,7 @@ public class Application {
 
 		PaintController controller = new PaintController(model, paint);
 
+		controller.addObserver(paint);
 		paint.setController(controller);
 		paint.setVisible(true);
 	}

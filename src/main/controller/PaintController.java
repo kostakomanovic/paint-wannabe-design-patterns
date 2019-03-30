@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 import javax.swing.JFileChooser;
 
@@ -22,7 +23,7 @@ import main.model.shape.base.Shape;
 import main.util.LogMapper;
 import main.view.Paint;
 
-public class PaintController {
+public class PaintController extends Observable {
 
 	private ShapesModel model;
 	private Paint paint;
@@ -115,10 +116,10 @@ public class PaintController {
 			this.commands = LogMapper
 					.mapLogsToCommands(loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()), this.model);
 			this.setUndoRedoNavigation();
-			this.repaint();
 		}
+
 	}
-	
+
 	private void helpSelect(int x, int y) {
 		Collections.reverse(this.model.getShapes());
 		this.model.getShapes().stream().forEach(shape -> {
@@ -130,6 +131,17 @@ public class PaintController {
 			}
 		});
 		Collections.reverse(this.model.getShapes());
+
+		this.emitChangesToObservers();
+		this.repaint();
+	}
+	
+	/**
+	 * Emits changes to all listeners (observers)
+	 */
+	private void emitChangesToObservers() {
+		this.setChanged();
+		this.notifyObservers(this.model.getShapes());
 	}
 
 	private void helpCommandExecution(Command command) {
