@@ -19,13 +19,12 @@ public class HexagonAdapter extends ArealShape implements Moveable, Serializable
 
 	public HexagonAdapter(Point center, int side, Color color, Color fillColor) {
 		this.hexagon = new Hexagon(center.getX(), center.getY(), side);
-		this.hexagon.setBorderColor(color);
-		this.hexagon.setAreaColor(fillColor);
+		this.setColor(color);
+		this.setFillColor(fillColor);
 	}
 
 	@Override
 	public void fill(Graphics g) {
-		this.hexagon.paint(g);
 	}
 
 	@Override
@@ -35,7 +34,6 @@ public class HexagonAdapter extends ArealShape implements Moveable, Serializable
 
 	@Override
 	public void select(Graphics g) {
-		this.hexagon.paint(g);
 	}
 
 	@Override
@@ -58,7 +56,31 @@ public class HexagonAdapter extends ArealShape implements Moveable, Serializable
 	public void setHexagon(Hexagon hexagon) {
 		this.hexagon = hexagon;
 	}
+	
+	public void setColor(Color color) {
+		this.hexagon.setBorderColor(color);
+		super.setColor(color);
+	}
+	
+	public Color getColor() {
+		return super.getColor();
+	}
+	
+	public void setFillColor(Color color) {
+		this.hexagon.setAreaColor(color);
+		super.setFillColor(color);;
+	}
+	
+	public Color getFillColor(Color color) {
+		return super.getFillColor();
+	}
 
+	public void setSelected(boolean selected) {
+		this.hexagon.setSelected(selected);
+		this.selected = selected;
+	}
+
+	
 	@Override
 	public void moveTo(int x, int y) {
 		this.hexagon.setX(x);

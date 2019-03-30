@@ -38,5 +38,11 @@ public class EditLineCmd implements Command{
 		originalLine.getEndingPoint().setY(oldLine.getEndingPoint().getY());
 		originalLine.setColor(oldLine.getColor());
 	}
+	
+	@Override
+	public String toString() {
+		// update,oldLine_newLine
+		return "update," + this.oldLine + "_" + this.newLine;
+	}
 
 }

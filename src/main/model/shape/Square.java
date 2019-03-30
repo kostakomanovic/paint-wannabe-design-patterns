@@ -100,7 +100,7 @@ public class Square extends ArealShape implements Moveable, Serializable {
 
 	@Override
 	public void fill(Graphics g) {
-		g.setColor(this.getColor());
+		g.setColor(this.getFillColor());
 		g.fillRect(this.getOrigin().getX() + 1, this.getOrigin().getY() + 1, this.getWidth() - 2, this.getWidth() - 2);
 	}
 

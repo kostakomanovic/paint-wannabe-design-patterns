@@ -106,5 +106,11 @@ public class Line extends Shape implements Moveable, Serializable {
 		this.getStartingPoint().moveFor(x,  y);
 		this.getEndingPoint().moveFor(x, y);
 	}
+	
+	@Override
+	public String toString() {
+		// line,point1-point2
+		return "line," + this.startingPoint + "-" + this.endingPoint;
+	}
 
 }

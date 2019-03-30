@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public abstract class ArealShape extends Shape {
 
-	private Color fillColor = Color.WHITE;
+	protected Color fillColor = Color.WHITE;
 	
 	public abstract void fill(Graphics g);
 

@@ -12,7 +12,7 @@ public class Rectangle extends Square implements Moveable, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 8466687855428681270L;
-	
+
 	private int height;
 
 	public Rectangle() {
@@ -51,7 +51,7 @@ public class Rectangle extends Square implements Moveable, Serializable {
 
 	@Override
 	public void fill(Graphics g) {
-		g.setColor(this.getColor());
+		g.setColor(this.getFillColor());
 		g.fillRect(this.getOrigin().getX() + 1, this.getOrigin().getY() + 1, this.getWidth() - 2, this.getHeight() - 2);
 	}
 
@@ -69,13 +69,13 @@ public class Rectangle extends Square implements Moveable, Serializable {
 		return x > this.getOrigin().getX() && x < this.getOrigin().getX() + this.getWidth()
 				&& y > this.getOrigin().getY() && y < this.getOrigin().getY() + this.getHeight();
 	}
-	
+
 	@Override
 	public void select(Graphics g) {
 		new Line(this.getOrigin(), new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY())).select(g);
 		new Line(this.getOrigin(), new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight())).select(g);
-		new Line(new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight()), this.getDiagonal().getEndingPoint()).select(g);
-		new Line(new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY()), this.getDiagonal().getEndingPoint()).select(g);	
+		new Line(new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY()), diagonal().getEndingPoint()).select(g);
+		new Line(new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight()), diagonal().getEndingPoint()).select(g);
 	}
 
 	public int getHeight() {

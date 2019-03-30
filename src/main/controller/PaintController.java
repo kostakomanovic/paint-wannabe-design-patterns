@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Observable;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import main.io.LoadManager;
 import main.io.SaveManager;
@@ -18,18 +20,30 @@ import main.io.out.SaveShapes;
 import main.model.ShapesModel;
 import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
+import main.model.command.edit.EditCircleCmd;
+import main.model.command.edit.EditHexagonAdapterCmd;
 import main.model.command.edit.EditLineCmd;
 import main.model.command.edit.EditPointCmd;
+import main.model.command.edit.EditRectangleCmd;
+import main.model.command.edit.EditSquareCmd;
 import main.model.command.z.DeleteShapeCmd;
+import main.model.shape.Circle;
+import main.model.shape.HexagonAdapter;
 import main.model.shape.Line;
 import main.model.shape.Point;
+import main.model.shape.Rectangle;
+import main.model.shape.Square;
 import main.model.shape.base.Shape;
 import main.util.LogMapper;
 import main.util.ShapesModelHelper;
 import main.util.constants.PaintMode;
 import main.view.Paint;
+import main.view.dialogs.edit.EditCircleDialog;
+import main.view.dialogs.edit.EditHexagonDialog;
 import main.view.dialogs.edit.EditLineDialog;
 import main.view.dialogs.edit.EditPointDialog;
+import main.view.dialogs.edit.EditRectangleDialog;
+import main.view.dialogs.edit.EditSquareDialog;
 
 public class PaintController extends Observable {
 
@@ -71,7 +85,46 @@ public class PaintController extends Observable {
 				AddShapeCmd addShape = new AddShapeCmd(line, this.model);
 				this.helpCommandExecution(addShape);
 			}
-		} else if (this.mode.equals(PaintMode.SELECT)) {
+		} 
+		else if (this.mode.equals(PaintMode.SQUARE)) {
+			String squareWidth = JOptionPane.showInputDialog(this.paint, "Enter square width:", "Square width", JOptionPane.QUESTION_MESSAGE);
+			if(squareWidth != null) {
+				int width = Integer.parseInt(squareWidth);
+				Square square = new Square(new Point(e.getX(), e.getY()), width, Color.black, Color.black);
+				AddShapeCmd addShape = new AddShapeCmd(square, this.model);
+				this.helpCommandExecution(addShape);
+			}
+		} else if (this.mode.equals(PaintMode.RECTANGLE)) {
+			JTextField width = new JTextField();
+			JTextField height = new JTextField();
+			Object[] widthHeight = {"Width:", width, "Height:", height};
+			int option = JOptionPane.showConfirmDialog(this.paint, widthHeight, "Choose rectangle size", JOptionPane.OK_CANCEL_OPTION);
+			if(option == JOptionPane.OK_OPTION) {
+				if(width.getText() != null && height.getText() != null) {
+					Rectangle rectangle = new Rectangle(new Point(e.getX(), e.getY()), Integer.parseInt(width.getText()), Integer.parseInt(height.getText()), Color.black, Color.black);
+					AddShapeCmd addShape = new AddShapeCmd(rectangle, this.model);
+					this.helpCommandExecution(addShape);					
+				}
+				
+			}
+		} else if (this.mode.equals(PaintMode.CIRCLE)) {
+			String circleRadius = JOptionPane.showInputDialog(this.paint, "Enter circle radius:", "Circle radius", JOptionPane.QUESTION_MESSAGE);
+			if(circleRadius != null) {
+				int radius = Integer.parseInt(circleRadius);
+				Circle circle = new Circle(new Point(e.getX(), e.getY()), radius, Color.black, Color.black);
+				AddShapeCmd addShape = new AddShapeCmd(circle, this.model);
+				this.helpCommandExecution(addShape);
+			}
+		} else if (this.mode.equals(PaintMode.HEXAGON)) {
+			String hexagonRadius = JOptionPane.showInputDialog(this.paint, "Enter hexagon radius:", "Hexagon radius", JOptionPane.QUESTION_MESSAGE);
+			if(hexagonRadius != null) {
+				int radius = Integer.parseInt(hexagonRadius);
+				HexagonAdapter hexagon = new HexagonAdapter(new Point(e.getX(), e.getY()), radius, Color.black, Color.white);
+				AddShapeCmd addShape = new AddShapeCmd(hexagon, this.model);
+				this.helpCommandExecution(addShape);
+			}
+		}
+		else if (this.mode.equals(PaintMode.SELECT)) {
 			this.helpSelect(e.getX(), e.getY());
 		}
 
@@ -186,6 +239,43 @@ public class PaintController extends Observable {
 				Command command = new EditLineCmd(line, (Line) dialog.getEditedShape());
 				this.helpCommandExecution(command);
 			}
+		} else if (selectedShape instanceof Rectangle) {
+			Rectangle rectangle = (Rectangle) selectedShape;
+			EditRectangleDialog dialog = new EditRectangleDialog(this.paint);
+			dialog.setRectangle(rectangle.clone());
+			dialog.setVisible(true);
+			if(dialog.getEditedShape() != null) {
+				Command command = new EditRectangleCmd(rectangle, (Rectangle) dialog.getEditedShape());
+				this.helpCommandExecution(command);
+			}
+		} else if (selectedShape instanceof Square) {
+			Square square = (Square) selectedShape;
+			EditSquareDialog dialog = new EditSquareDialog(this.paint);
+			dialog.setSquare(square.clone());
+			dialog.setVisible(true);
+			if(dialog.getEditedShape() != null) {
+				Command command = new EditSquareCmd(square, (Square)dialog.getEditedShape());
+				this.helpCommandExecution(command);
+			}
+		} else if (selectedShape instanceof Circle) {
+			Circle circle = (Circle) selectedShape;
+			EditCircleDialog dialog = new EditCircleDialog(this.paint);
+			dialog.setCircle(circle.clone());
+			dialog.setVisible(true);
+			if(dialog.getEditedShape() != null) {
+				Command command = new EditCircleCmd(circle, (Circle)dialog.getEditedShape());
+				this.helpCommandExecution(command);
+			}
+		} else if (selectedShape instanceof HexagonAdapter) {
+			HexagonAdapter hexagon = (HexagonAdapter) selectedShape;
+			EditHexagonDialog dialog = new EditHexagonDialog(this.paint);
+			dialog.setHexagon(hexagon.clone().clone());
+			dialog.setVisible(true);
+			if(dialog.getEditedShape() != null) {
+				Command command = new EditHexagonAdapterCmd(hexagon, (HexagonAdapter)dialog.getEditedShape());
+				this.helpCommandExecution(command);
+			}
+
 		}
 
 		this.deselectAll();

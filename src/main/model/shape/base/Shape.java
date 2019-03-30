@@ -5,8 +5,8 @@ import java.awt.Graphics;
 
 public abstract class Shape implements Cloneable {
 
-	private Color color;
-	private boolean selected = false;
+	protected Color color;
+	protected boolean selected = false;
 
 	public Shape() {
 	}

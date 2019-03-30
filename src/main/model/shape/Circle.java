@@ -42,7 +42,7 @@ public class Circle extends ArealShape implements Moveable, Serializable {
 
 	@Override
 	public void fill(Graphics g) {
-		g.setColor(this.getColor());
+		g.setColor(this.getFillColor());
 		g.fillOval(this.getCenter().getX() - this.getRadius() + 1, this.getCenter().getY() - this.getRadius() + 1,
 				this.getRadius() * 2 - 2, this.getRadius() * 2 - 2);
 	}
@@ -58,8 +58,11 @@ public class Circle extends ArealShape implements Moveable, Serializable {
 	@Override
 	public void select(Graphics g) {
 		new Point(this.getCenter().getX(), this.getCenter().getY() - this.getRadius()).select(g);
+		new Point(this.getCenter().getX(), this.getCenter().getY() + this.getRadius()).select(g);
+		new Point(this.getCenter().getX(), this.getCenter().getY()).select(g);
 		new Point(this.getCenter().getX() - this.getRadius(), this.getCenter().getY()).select(g);
 		new Point(this.getCenter().getX() + this.getRadius(), this.getCenter().getY()).select(g);
+		
 	}
 
 	@Override
