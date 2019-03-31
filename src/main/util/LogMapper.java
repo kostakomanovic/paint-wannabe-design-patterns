@@ -7,6 +7,7 @@ import java.util.List;
 import main.model.ShapesModel;
 import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
+import main.model.command.delete.DeleteShapeCmd;
 import main.model.command.edit.EditCircleCmd;
 import main.model.command.edit.EditHexagonAdapterCmd;
 import main.model.command.edit.EditLineCmd;
@@ -19,15 +20,51 @@ import main.model.shape.Line;
 import main.model.shape.Point;
 import main.model.shape.Rectangle;
 import main.model.shape.Square;
+import main.model.shape.base.Shape;
 
 public class LogMapper {
+
+	private static Command mapLogToDeleteCommand(Object objLog, ShapesModel model) {
+		String log = objLog.toString();
+		String[] shapes = log.split("\\|")[1].split("_");
+
+		List<Shape> deletedShapes = new ArrayList<>();
+
+		for (String shape : shapes) {
+			String type = shape.split(":")[0].split(",")[0];
+			
+			if (type.equals("point")) {
+				deletedShapes.add(getPoint(shape));
+			} else if (type.equals("line")) {
+				String[] points = shape.split(":")[1].split("-");
+				deletedShapes.add(getLine(getPoint(points[0]), getPoint(points[1]), shape.split(":")[2]));
+			} else if (type.equals("square")) {
+				String[] split = log.split(":");
+				deletedShapes.add(getSquare(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
+						split[4].split("_")[0]));
+			} else if (shape.equals("rectangle")) {
+				String[] split = log.split(":");
+				deletedShapes.add(getRectangle(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
+						split[4].split("_")[0], split[5].split("_")[0]));
+			} else if (shape.equals("circle")) {
+				String[] split = log.split(":");
+				deletedShapes.add(getCircle(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
+						split[4].split("_")[0]));
+			} else if (shape.equals("hexagon")) {
+				String[] split = log.split(":");
+				deletedShapes.add(getHexagon(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
+						split[4].split("_")[0]));
+			}
+		}
+
+		return new DeleteShapeCmd(deletedShapes, model);
+	}
 
 	private static Command mapLogToEditCommand(Object objLog, ShapesModel model) {
 		String log = objLog.toString();
 		String[] logSplit = log.split(",");
 
 		String shape = logSplit[1].split("\\|")[0];
-		System.out.println(shape);
 		if (shape.equals("point")) {
 			String split = log.split("\\|")[1];
 			String pointOne = split.split("_")[0];
@@ -68,8 +105,10 @@ public class LogMapper {
 			String[] rectTwoSplit = rectTwo.split(":");
 
 			return new EditRectangleCmd(
-					getRectangle(getPoint(rectOneSplit[1]), rectOneSplit[2], rectOneSplit[3], rectOneSplit[4], rectOneSplit[5]),
-					getRectangle(getPoint(rectTwoSplit[1]), rectTwoSplit[2], rectTwoSplit[3], rectTwoSplit[4], rectTwoSplit[5]));
+					getRectangle(getPoint(rectOneSplit[1]), rectOneSplit[2], rectOneSplit[3], rectOneSplit[4],
+							rectOneSplit[5]),
+					getRectangle(getPoint(rectTwoSplit[1]), rectTwoSplit[2], rectTwoSplit[3], rectTwoSplit[4],
+							rectTwoSplit[5]));
 		} else if (shape.equals("circle")) {
 			String split = log.split("\\|")[1];
 
@@ -90,8 +129,10 @@ public class LogMapper {
 			String[] hexagonTwoSplit = hexagonTwo.split(":");
 
 			return new EditHexagonAdapterCmd(
-					getHexagon(getPoint(hexagonOneSplit[1]), hexagonOneSplit[2], hexagonOneSplit[3], hexagonOneSplit[4]),
-					getHexagon(getPoint(hexagonTwoSplit[1]), hexagonTwoSplit[2], hexagonTwoSplit[3], hexagonTwoSplit[4]));
+					getHexagon(getPoint(hexagonOneSplit[1]), hexagonOneSplit[2], hexagonOneSplit[3],
+							hexagonOneSplit[4]),
+					getHexagon(getPoint(hexagonTwoSplit[1]), hexagonTwoSplit[2], hexagonTwoSplit[3],
+							hexagonTwoSplit[4]));
 		}
 		return null;
 	}
@@ -183,6 +224,8 @@ public class LogMapper {
 				commands.add(mapLogToAddCommand(log, model));
 			} else if (log.toString().contains("edit")) {
 				commands.add(mapLogToEditCommand(log, model));
+			} else if (log.toString().contains("delete")) {
+				commands.add(mapLogToDeleteCommand(log, model));
 			}
 		});
 

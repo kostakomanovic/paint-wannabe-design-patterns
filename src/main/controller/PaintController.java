@@ -20,6 +20,7 @@ import main.io.out.SaveShapes;
 import main.model.ShapesModel;
 import main.model.command.Command;
 import main.model.command.add.AddShapeCmd;
+import main.model.command.delete.DeleteShapeCmd;
 import main.model.command.edit.EditCircleCmd;
 import main.model.command.edit.EditHexagonAdapterCmd;
 import main.model.command.edit.EditLineCmd;
@@ -28,7 +29,6 @@ import main.model.command.edit.EditRectangleCmd;
 import main.model.command.edit.EditSquareCmd;
 import main.model.command.z.BringToBackCmd;
 import main.model.command.z.BringToFrontCmd;
-import main.model.command.z.DeleteShapeCmd;
 import main.model.command.z.ToBackCmd;
 import main.model.command.z.ToFrontCmd;
 import main.model.shape.Circle;
@@ -236,7 +236,11 @@ public class PaintController extends Observable {
 		String[] options = {"Cancel", "Yes"};
 		int option = JOptionPane.showOptionDialog(this.paint, "Are you sure you want to delete selected shape/shapes?", "Delete shapes?", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if(option == 1) {
-			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(this.model);
+			List<Shape> deletedShapes = new ArrayList<Shape>();
+			for(Shape shape : this.model.getShapes()) {
+				if(shape.isSelected()) deletedShapes.add(shape);
+			}
+			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(deletedShapes, this.model);
 			this.helpCommandExecution(deleteCmd);
 			this.emitChangesToObservers();
 			this.deselectAll();			
