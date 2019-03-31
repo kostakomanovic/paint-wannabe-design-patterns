@@ -68,9 +68,7 @@ public class Point extends Shape implements Moveable, Serializable {
 	
 	@Override
 	public Point clone() {
-		Point point = new Point(this.getX(), this.getY(), this.getColor());
-		point.setSelected(this.isSelected());
-		return point;
+		return new Point(this.getX(), this.getY(), this.getColor());
 	}
 
 	public int getX() {
@@ -102,6 +100,15 @@ public class Point extends Shape implements Moveable, Serializable {
 	public void moveFor(int x, int y) {
 		this.setX(this.getX() + x);
 		this.setY(this.getY() + y);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Point) {
+			Point castedObj = (Point) obj;
+			return x == castedObj.getX() && y == castedObj.getY();
+		}
+		return false;
 	}
 
 }

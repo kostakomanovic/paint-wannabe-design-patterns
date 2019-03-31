@@ -2,19 +2,23 @@ package main.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -22,16 +26,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 
 import main.controller.PaintController;
-import main.model.command.Command;
 import main.model.shape.base.Shape;
 import main.util.constants.PaintMode;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.SystemColor;
-import javax.swing.JLabel;
-import java.awt.event.MouseMotionAdapter;
 
 public class Paint extends JFrame implements Observer {
 
@@ -52,8 +51,8 @@ public class Paint extends JFrame implements Observer {
 	/**
 	 * Lists
 	 */
-	private DefaultListModel<Command> logListModel = new DefaultListModel<>();
-	private JList<Command> commandList = new JList<>(logListModel);
+	private DefaultListModel<String> logListModel = new DefaultListModel<>();
+	private JList<String> commandList = new JList<>(logListModel);
 
 	/**
 	 * Undo Redo Navigation, Select
@@ -120,12 +119,6 @@ public class Paint extends JFrame implements Observer {
 		});
 
 		ButtonGroup bgShapes = new ButtonGroup();
-		bgShapes.add(this.tbtnPoint);
-		bgShapes.add(this.tbtnLine);
-		bgShapes.add(this.tbtnSquare);
-		bgShapes.add(this.tbtnRectangle);
-		bgShapes.add(this.tbtnCircle);
-		bgShapes.add(this.tbtnHexagon);
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -133,7 +126,7 @@ public class Paint extends JFrame implements Observer {
 					controller.handleDelete();
 			}
 		});
-
+		
 		this.btnDelete.setEnabled(false);
 		this.btnEdit.setEnabled(false);
 		this.btnSelect.setEnabled(false);
@@ -231,8 +224,15 @@ public class Paint extends JFrame implements Observer {
 		mainPanel.add(rightShapesPanel, BorderLayout.EAST);
 
 		getContentPane().add(mbMain, BorderLayout.NORTH);
+		bgShapes.add(this.tbtnSquare);
 		
-		rightShapesPanel.setLayout(new BoxLayout(rightShapesPanel, BoxLayout.Y_AXIS));
+		tbtnSquare.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.handleChangeMode(PaintMode.SQUARE);
+			}
+		});
+		bgShapes.add(this.tbtnPoint);
 		
 		tbtnPoint.addMouseListener(new MouseAdapter() {
 			@Override
@@ -240,7 +240,9 @@ public class Paint extends JFrame implements Observer {
 				controller.handleChangeMode(PaintMode.POINT);
 			}
 		});
+		rightShapesPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		rightShapesPanel.add(tbtnPoint);
+		bgShapes.add(this.tbtnLine);
 		
 		tbtnLine.addMouseListener(new MouseAdapter() {
 			@Override
@@ -250,13 +252,22 @@ public class Paint extends JFrame implements Observer {
 		});
 		rightShapesPanel.add(tbtnLine);
 		
-		tbtnSquare.addMouseListener(new MouseAdapter() {
+		tbtnLine.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.handleChangeMode(PaintMode.SQUARE);
+				controller.handleChangeMode(PaintMode.LINE);
 			}
 		});
 		rightShapesPanel.add(tbtnSquare);
+		bgShapes.add(this.tbtnCircle);
+		
+		tbtnCircle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.handleChangeMode(PaintMode.CIRCLE);
+			}
+		});
+		bgShapes.add(this.tbtnRectangle);
 		
 		tbtnRectangle.addMouseListener(new MouseAdapter() {
 			@Override
@@ -265,14 +276,8 @@ public class Paint extends JFrame implements Observer {
 			}
 		});
 		rightShapesPanel.add(tbtnRectangle);
-		
-		tbtnCircle.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				controller.handleChangeMode(PaintMode.CIRCLE);
-			}
-		});
 		rightShapesPanel.add(tbtnCircle);
+		bgShapes.add(this.tbtnHexagon);
 		
 		tbtnHexagon.addMouseListener(new MouseAdapter() {
 			@Override
@@ -283,7 +288,6 @@ public class Paint extends JFrame implements Observer {
 		rightShapesPanel.add(tbtnHexagon);
 		
 		mainPanel.add(leftBringToPanel, BorderLayout.WEST);
-		leftBringToPanel.setLayout(new BoxLayout(leftBringToPanel, BoxLayout.Y_AXIS));
 		btnToFront.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -311,6 +315,7 @@ public class Paint extends JFrame implements Observer {
 				if(btnBringToBack.isEnabled()) controller.handleBringToBack();
 			}
 		});
+		leftBringToPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		leftBringToPanel.add(btnToFront);
 		
@@ -328,13 +333,6 @@ public class Paint extends JFrame implements Observer {
 		btnFillColor.setVerticalAlignment(SwingConstants.BOTTOM);
 		
 		leftBringToPanel.add(btnFillColor);
-		
-		tbtnLine.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				controller.handleChangeMode(PaintMode.LINE);
-			}
-		});
 
 		mbMain.add(mnFile);
 
@@ -395,7 +393,7 @@ public class Paint extends JFrame implements Observer {
 		this.btnRedo.setEnabled(enabled);
 	}
 
-	public DefaultListModel<Command> getLogListModel() {
+	public DefaultListModel<String> getLogListModel() {
 		return this.logListModel;
 	}
 	

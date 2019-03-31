@@ -2,23 +2,18 @@ package main.view.dialogs.edit;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import main.model.shape.Line;
 import main.model.shape.base.Shape;
@@ -30,206 +25,160 @@ public class EditLineDialog extends JDialog implements EditDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = -7751780953179156198L;
-	public JTextField tfXFirst, tfYFirst, tfXSecond, tfYSecond;
-	public JButton btnColor;
-	private boolean sacuvano = false;
-	
+	private JTextField txtXStart;
+	private JTextField txtYStart;
+	private JTextField txtXEnd;
+	private JTextField txtYEnd;
+	private JButton btnColor;
 	private Line line;
+	
 
-	public EditLineDialog(JFrame parent) {
-		super(parent, "Edit line", true);
+	public EditLineDialog(Line line) {
 
-		JPanel jpMain = new JPanel();
-		jpMain.setBorder(new EmptyBorder(10, 10, 10, 10));
-		getContentPane().add(jpMain, BorderLayout.NORTH);
-		GridBagLayout gbl_jpMain = new GridBagLayout();
-		jpMain.setLayout(gbl_jpMain);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
+		setTitle("Edit Line");
+		setResizable(false);
+		setModal(true);
+		setBounds(100, 100, 450, 300);
+		
+		this.line = line.clone();
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		JLabel lblXPrva = new JLabel("First point  X:");
-		jpMain.add(lblXPrva, gbc);
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		tfXFirst = new JTextField(10);
-		tfXFirst.addKeyListener(new KeyAdapter() {
+		JLabel lblXStart = new JLabel("Enter Start X:");
+		lblXStart.setBounds(10, 15, 170, 25);
+		panel.add(lblXStart);
+
+		JLabel lblYStart = new JLabel("Enter Start Y:");
+		lblYStart.setBounds(10, 55, 170, 25);
+		panel.add(lblYStart);
+
+		JLabel lblXEnd = new JLabel("Enter End X:");
+		lblXEnd.setBounds(10, 95, 170, 25);
+		panel.add(lblXEnd);
+
+		JLabel lblYEnd = new JLabel("Enter End Y:");
+		lblYEnd.setBounds(10, 135, 170, 25);
+		panel.add(lblYEnd);
+
+		JLabel lblColor = new JLabel("Choose color");
+		lblColor.setBounds(10, 175, 170, 25);
+		panel.add(lblColor);
+
+		txtXStart = new JTextField();
+		txtXStart.setBounds(200, 15, 224, 25);
+		txtXStart.setText(Integer.toString(line.getStartingPoint().getX()));
+		panel.add(txtXStart);
+		txtXStart.setColumns(10);
+
+		txtYStart = new JTextField();
+		txtYStart.setBounds(200, 55, 224, 25);
+		txtYStart.setText(Integer.toString(line.getStartingPoint().getY()));
+		panel.add(txtYStart);
+		txtYStart.setColumns(10);
+
+		txtXEnd = new JTextField();
+		txtXEnd.setBounds(200, 95, 224, 25);
+		txtXEnd.setText(Integer.toString(line.getEndingPoint().getX()));
+		panel.add(txtXEnd);
+		txtXEnd.setColumns(10);
+
+		txtYEnd = new JTextField();
+		txtYEnd.setBounds(200, 135, 224, 25);
+		txtYEnd.setText(Integer.toString(line.getEndingPoint().getY()));
+		panel.add(txtYEnd);
+		txtYEnd.setColumns(10);
+
+		btnColor = new JButton();
+		btnColor.addMouseListener(new MouseAdapter() {
 			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { // unet je broj
-					if (tfXFirst.getText().length() > 4) {
-						tooLargeNumberEntered(tfXFirst);
-					}
-				} else { // nije unet broj
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { // pritisnut
-																												// backspace
-						return;
-					}
-					notNumberInserted(tfXFirst);
-				}
+			public void mouseClicked(MouseEvent arg0) {
+				setColor(btnColor);
 			}
 		});
-		jpMain.add(tfXFirst, gbc);
+		btnColor.setBounds(200, 175, 224, 25);
+		btnColor.setBackground(line.getColor());
+		panel.add(btnColor);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		JLabel lblYPrva = new JLabel("First point Y:");
-		jpMain.add(lblYPrva, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		tfYFirst = new JTextField(10);
-		tfYFirst.addKeyListener(new KeyAdapter() {
+		JButton btnOk = new JButton("Ok");
+		btnOk.addMouseListener(new MouseAdapter() {
 			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) {
-					if (tfYFirst.getText().length() > 4) {
-						tooLargeNumberEntered(tfYFirst);
-					}
+			public void mouseClicked(MouseEvent arg0) {
+				if (txtXStart.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter X Start", "Error!",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				} else if (txtYStart.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter Y Start!", "Error!",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				} else if (txtXEnd.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter X End!", "Error!",
+							JOptionPane.WARNING_MESSAGE);
+				} else if (txtYEnd.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter Y End!", "Error!",
+							JOptionPane.WARNING_MESSAGE);
 				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
-						return;
+					try {
+						int xS = Integer.parseInt(txtXStart.getText().trim());
+						int yS = Integer.parseInt(txtYStart.getText().trim());
+						int xE = Integer.parseInt(txtXEnd.getText().trim());
+						int yE = Integer.parseInt(txtYEnd.getText().trim());
+						if (xS <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "X Start has to be larger than 0",
+									"Error!", JOptionPane.WARNING_MESSAGE);
+						} else if (yS <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "Y Start has to be larger than 0",
+									"Error!", JOptionPane.WARNING_MESSAGE);
+						} else if (xE <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "X End has to be larger than 0",
+									"Error!", JOptionPane.WARNING_MESSAGE);
+						} else if (yE <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "Y End has to be larger than 0",
+									"Error!", JOptionPane.WARNING_MESSAGE);
+						} else {
+							line.getStartingPoint().setX(xS);
+							line.getStartingPoint().setY(yS);
+							line.getEndingPoint().setX(xE);
+							line.getEndingPoint().setY(yE);
+							line.setColor(btnColor.getBackground());
+							
+							dispose();
+						}
+
+					} catch (NumberFormatException e2) {
+						JOptionPane.showMessageDialog(panel, "X and Y coordinates have to be integers", "Error!",
+								JOptionPane.WARNING_MESSAGE);
 					}
-					notNumberInserted(tfYFirst);
 				}
 			}
 		});
-		jpMain.add(tfYFirst, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		JLabel lblXDruga = new JLabel("Second point X:");
-		jpMain.add(lblXDruga, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		tfXSecond = new JTextField(10);
-		tfXSecond.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) {
-					if (tfXSecond.getText().length() > 4) {
-						tooLargeNumberEntered(tfXSecond);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
-						return;
-					}
-					notNumberInserted(tfXSecond);
-				}
-			}
-		});
-		jpMain.add(tfXSecond, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		JLabel lblYDruga = new JLabel("Second point Y:");
-		jpMain.add(lblYDruga, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		tfYSecond = new JTextField(10);
-		tfYSecond.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) {
-					if (tfYSecond.getText().length() > 4) {
-						tooLargeNumberEntered(tfYSecond);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
-						return;
-					}
-					notNumberInserted(tfYSecond);
-				}
-			}
-		});
-		jpMain.add(tfYSecond, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		JLabel lblColor = new JLabel("Color:");
-		jpMain.add(lblColor, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 4;
-		btnColor = new JButton(" ");
-		jpMain.add(btnColor, gbc);
-		btnColor.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				EditLineDialog.this.boja(btnColor);
-			}
-		});
-
-		JButton btnOk = new JButton("Save");
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 5;
-		jpMain.add(btnOk, gbc);
-
-		btnOk.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				line.setColor(btnColor.getBackground());
-				line.moveBothPoints(Integer.parseInt(tfXFirst.getText()), Integer.parseInt(tfYFirst.getText()), Integer.parseInt(tfXSecond.getText()), Integer.parseInt(tfYSecond.getText()));
+		btnOk.setBounds(35, 220, 89, 25);
+		panel.add(btnOk);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
 
-
-		this.setResizable(false);
-		this.pack();
-		this.setLocationRelativeTo(parent);
-	}
-
-	private void insertInfo(Line temp) {
-		this.tfXFirst.setText(String.valueOf(temp.getStartingPoint().getX()));
-		this.tfYFirst.setText(String.valueOf(temp.getStartingPoint().getY()));
-		this.tfXSecond.setText(String.valueOf(temp.getEndingPoint().getX()));
-		this.tfYSecond.setText(String.valueOf(temp.getEndingPoint().getY()));
-		this.btnColor.setBackground(temp.getColor());
-	}
-
-	private void boja(JButton btnColor) {
-		JColorChooser jccColor = new JColorChooser();
-		Color color = jccColor.showDialog(null, "Choose color", btnColor.getBackground());
-
-		if (color != null)
-			btnColor.setBackground(color);
+		btnCancel.setBounds(248, 220, 89, 25);
+		panel.add(btnCancel);
 
 	}
 
-	public boolean getSacuvano() {
-		return this.sacuvano;
-	}
-
-	private void notNumberInserted(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Only numbers allowed!!", "Error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
-	}
-
-	private void tooLargeNumberEntered(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Number is too large!", "Error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
+	public void setColor(JButton btnColor) {
+		JColorChooser jCCh = new JColorChooser();
+		Color col = jCCh.showDialog(null, "Choose Color!", Color.BLACK);
+		if (col != null) {
+			btnColor.setBackground(col);
+		}
 	}
 
 	@Override
 	public Shape getEditedShape() {
 		return this.line;
 	}
-	
-	public void setLine(Line line) {
-		this.line = line;
-		this.tfXFirst.setText(String.valueOf(line.getStartingPoint().getX()));
-		this.tfYFirst.setText(String.valueOf(line.getStartingPoint().getY()));
-		this.tfXSecond.setText(String.valueOf(line.getEndingPoint().getX()));
-		this.tfYSecond.setText(String.valueOf(line.getEndingPoint().getY()));
-		this.btnColor.setBackground(line.getColor());
-		
-	}
-
 }

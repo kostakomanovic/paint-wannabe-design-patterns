@@ -2,23 +2,18 @@ package main.view.dialogs.edit;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import main.model.shape.Point;
 import main.model.shape.base.Shape;
@@ -31,144 +26,118 @@ public class EditPointDialog extends JDialog implements EditDialog {
 	 */
 	private static final long serialVersionUID = -5567244405970261868L;
 
-	public JTextField tfX;
-	public JTextField tfY;
-	public JButton btnColor;
+	private JTextField txtX, txtY;
+	private JButton btnColor;
+	private Point point;
+	
+	public EditPointDialog(Point point) {
 
-	Point point;
+		setTitle("Edit point");
+		setResizable(false);
+		setModal(true);
+		setBounds(100, 100, 450, 250);
+		
+		this.point = point;
 
-	public EditPointDialog(JFrame parent) {
-		super(parent, "Edit point", true);
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 
-		JPanel jpMain = new JPanel();
-		jpMain.setBorder(new EmptyBorder(10, 10, 10, 10));
-		getContentPane().add(jpMain, BorderLayout.NORTH);
-		GridBagLayout gbl_jpMain = new GridBagLayout();
-		jpMain.setLayout(gbl_jpMain);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
+		JLabel lblEnterX = new JLabel("Enter X coordinate:");
+		lblEnterX.setBounds(10, 15, 170, 25);
+		panel.add(lblEnterX);
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		JLabel lblX = new JLabel("X:");
-		jpMain.add(lblX, gbc);
+		JLabel lblEnterY = new JLabel("Enter Y coordinate:");
+		lblEnterY.setBounds(10, 55, 170, 25);
+		panel.add(lblEnterY);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		tfX = new JTextField(10);
-		tfX.addKeyListener(new KeyAdapter() {
+		JLabel lblChooseColor = new JLabel("Choose color:");
+		lblChooseColor.setBounds(10, 95, 170, 25);
+		panel.add(lblChooseColor);
+
+		txtX = new JTextField();
+		txtX.setBounds(200, 15, 224, 25);
+		txtX.setText(Integer.toString(point.getX()));
+		panel.add(txtX);
+		txtX.setColumns(10);
+
+		txtY = new JTextField();
+		txtY.setBounds(200, 55, 224, 25);
+		txtY.setText(Integer.toString(point.getY()));
+		panel.add(txtY);
+		txtY.setColumns(10);
+
+		btnColor = new JButton();
+		btnColor.addMouseListener(new MouseAdapter() {
 			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) {
-					if (tfX.getText().length() > 4) {
-						EditPointDialog.this.tooLargeNumberEntered(tfX);
-					}
+			public void mouseClicked(MouseEvent arg0) {
+				setColor(btnColor);
+			}
+		});
+		btnColor.setBounds(200, 95, 224, 25);
+		btnColor.setBackground(point.getColor());
+
+		panel.add(btnColor);
+		JButton btnOk = new JButton("Ok");
+		btnOk.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (txtX.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter x!", "Error!", JOptionPane.WARNING_MESSAGE);
+					return;
+				} else if (txtY.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter y!", "Error!", JOptionPane.WARNING_MESSAGE);
+					return;
+
 				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
-						return;
+					try {
+						int x1 = Integer.parseInt(txtX.getText().trim());
+						int y1 = Integer.parseInt(txtY.getText().trim());
+						if (x1 <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "X has to be larger than 0", "Error!",
+									JOptionPane.WARNING_MESSAGE);
+						} else if (y1 <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "Y has to be larger than 0", "Error!",
+									JOptionPane.WARNING_MESSAGE);
+						} else {
+							point.setX(x1);
+							point.setY(y1);
+							point.setColor(btnColor.getBackground());
+							dispose();
+						}
+
+					} catch (NumberFormatException e2) {
+						JOptionPane.showMessageDialog(panel, "X and Y have to be integers!", "Error!",
+								JOptionPane.WARNING_MESSAGE);
 					}
-					EditPointDialog.this.notNumberInserted(tfX);
 				}
 			}
 		});
-		jpMain.add(tfX, gbc);
+		btnOk.setBounds(35, 180, 89, 25);
+		panel.add(btnOk);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		JLabel lblY = new JLabel("Y:");
-		jpMain.add(lblY, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		tfY = new JTextField(10);
-		tfY.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) {
-					if (tfY.getText().length() > 4) {
-						EditPointDialog.this.tooLargeNumberEntered(tfY);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { // pritisnut
-																												// backspace
-						return;
-					}
-					EditPointDialog.this.notNumberInserted(tfY);
-				}
-			}
-		});
-		jpMain.add(tfY, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		JLabel lblColor = new JLabel("Color:");
-		jpMain.add(lblColor, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		btnColor = new JButton(" ");
-		jpMain.add(btnColor, gbc);
-		btnColor.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				EditPointDialog.this.color(btnColor);
-			}
-		});
-
-		JButton btnOk = new JButton("Save");
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		jpMain.add(btnOk, gbc);
-
-		btnOk.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				point.setColor(btnColor.getBackground());
-				point.moveTo(Integer.parseInt(tfX.getText()), Integer.parseInt(tfY.getText()));
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
 
-		this.setResizable(false);
-		this.pack();
-		this.setLocationRelativeTo(parent);
+		btnCancel.setBounds(247, 180, 89, 25);
+		panel.add(btnCancel);
 	}
 
-	public Point getPoint() {
-		return point;
-	}
-
-	public void setPoint(Point point) {
-		this.point = point;
-		this.tfX.setText(String.valueOf(point.getX()));
-		this.tfY.setText(String.valueOf(point.getY()));
-		this.btnColor.setBackground(point.getColor());
-	}
-
-	private void color(JButton btnColor) {
-		JColorChooser jccColor = new JColorChooser();
-		Color color = jccColor.showDialog(null, "Choose color", btnColor.getBackground());
-
-		if (color != null)
-			this.btnColor.setBackground(color);
-
+	public void setColor(JButton btnColor) {
+		JColorChooser jCCh = new JColorChooser();
+		Color col = jCCh.showDialog(null, "Choose Color!", Color.BLACK);
+		if (col != null) {
+			btnColor.setBackground(col);
+		}
 	}
 
 	@Override
 	public Shape getEditedShape() {
 		return this.point;
-	}
-
-	private void notNumberInserted(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Only number allowed!", "Error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
-	}
-
-	private void tooLargeNumberEntered(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Number is too big!", "Error", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
 	}
 
 }

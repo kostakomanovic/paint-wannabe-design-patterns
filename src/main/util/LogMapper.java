@@ -70,7 +70,7 @@ public class LogMapper {
 			String pointOne = split.split("_")[0];
 			String pointTwo = split.split("_")[1];
 
-			return new EditPointCmd(getPoint(pointOne), getPoint(pointTwo));
+			return new EditPointCmd(getPoint(pointOne), getPoint(pointTwo), model, true);
 		} else if (shape.equals("line")) {
 			String split = log.split("\\|")[1];
 			String lineOne = split.split("_")[0];
@@ -84,7 +84,7 @@ public class LogMapper {
 			String colorSecond = lineTwo.split(":")[2];
 
 			return new EditLineCmd(getLine(getPoint(pointOneFirst), getPoint(pointTwoFirst), colorFirst),
-					getLine(getPoint(pointOneSecond), getPoint(pointTwoSecond), colorSecond));
+					getLine(getPoint(pointOneSecond), getPoint(pointTwoSecond), colorSecond), model, true);
 		} else if (shape.equals("square")) {
 			String split = log.split("\\|")[1];
 
@@ -95,7 +95,7 @@ public class LogMapper {
 
 			return new EditSquareCmd(
 					getSquare(getPoint(squareOneSplit[1]), squareOneSplit[2], squareOneSplit[3], squareOneSplit[4]),
-					getSquare(getPoint(squareTwoSplit[1]), squareTwoSplit[2], squareTwoSplit[3], squareTwoSplit[4]));
+					getSquare(getPoint(squareTwoSplit[1]), squareTwoSplit[2], squareTwoSplit[3], squareTwoSplit[4]), model, true);
 		} else if (shape.equals("rectangle")) {
 			String split = log.split("\\|")[1];
 
@@ -108,7 +108,7 @@ public class LogMapper {
 					getRectangle(getPoint(rectOneSplit[1]), rectOneSplit[2], rectOneSplit[3], rectOneSplit[4],
 							rectOneSplit[5]),
 					getRectangle(getPoint(rectTwoSplit[1]), rectTwoSplit[2], rectTwoSplit[3], rectTwoSplit[4],
-							rectTwoSplit[5]));
+							rectTwoSplit[5]), model, true);
 		} else if (shape.equals("circle")) {
 			String split = log.split("\\|")[1];
 
@@ -119,7 +119,7 @@ public class LogMapper {
 
 			return new EditCircleCmd(
 					getCircle(getPoint(circleOneSplit[1]), circleOneSplit[2], circleOneSplit[3], circleOneSplit[4]),
-					getCircle(getPoint(circleTwoSplit[1]), circleTwoSplit[2], circleTwoSplit[3], circleTwoSplit[4]));
+					getCircle(getPoint(circleTwoSplit[1]), circleTwoSplit[2], circleTwoSplit[3], circleTwoSplit[4]), model, true);
 		} else if (shape.equals("hexagon")) {
 			String split = log.split("\\|")[1];
 
@@ -132,7 +132,7 @@ public class LogMapper {
 					getHexagon(getPoint(hexagonOneSplit[1]), hexagonOneSplit[2], hexagonOneSplit[3],
 							hexagonOneSplit[4]),
 					getHexagon(getPoint(hexagonTwoSplit[1]), hexagonTwoSplit[2], hexagonTwoSplit[3],
-							hexagonTwoSplit[4]));
+							hexagonTwoSplit[4]), model, true);
 		}
 		return null;
 	}

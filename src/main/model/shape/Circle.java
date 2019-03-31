@@ -101,5 +101,14 @@ public class Circle extends ArealShape implements Moveable, Serializable {
 		// circle:origin:radius:rgb:fillRgb
 		return "circle:" + this.center + ":" + this.radius + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Circle) {
+			Circle castedObj = (Circle) obj;
+			return center.equals(castedObj.getCenter()) && radius == castedObj.getRadius();
+		}
+		return false;
+	}
 
 }

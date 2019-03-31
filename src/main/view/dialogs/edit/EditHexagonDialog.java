@@ -2,23 +2,18 @@ package main.view.dialogs.edit;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import main.model.shape.HexagonAdapter;
 import main.model.shape.base.Shape;
@@ -26,180 +21,151 @@ import main.view.dialogs.EditDialog;
 
 public class EditHexagonDialog extends JDialog implements EditDialog {
 
-	public JTextField tfX, tfY, tfWidth;
-	public JButton btnFillColor, btnColor;
+	private JTextField txtX, txtY, txtR;
+	private JButton btnColor, btnFillColor;
 	private HexagonAdapter hexagon;
+	
+	public HexagonAdapter getHexagon() {
+		return hexagon;
+	}
 
-	public EditHexagonDialog(JFrame parent) {
-		super(parent, "Edit hexagon", true);
+	public EditHexagonDialog(HexagonAdapter hexagon) {
 
-		JPanel jpMain = new JPanel();
-		jpMain.setBorder(new EmptyBorder(10, 10, 10, 10));
-		getContentPane().add(jpMain, BorderLayout.NORTH);
-		GridBagLayout gbl_jpMain = new GridBagLayout();
-		jpMain.setLayout(gbl_jpMain);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
+		setTitle("Edit Hexagon");
+		setResizable(false);
+		setModal(true);
+		setBounds(100, 100, 450, 300);
+		
+		this.hexagon = hexagon;
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		JLabel lblXFirst = new JLabel("X:");
-		jpMain.add(lblXFirst, gbc);
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		tfX = new JTextField(10);
-		tfX.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { 
-					if (tfX.getText().length() > 4) {
-						tooLargeNumberEntered(tfX);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { 
-																												
-						return;
-					}
-					notNumberInserted(tfX);
-				}
-			}
-		});
-		jpMain.add(tfX, gbc);
+		JLabel lblX = new JLabel("Enter x:");
+		lblX.setBounds(10, 15, 170, 25);
+		panel.add(lblX);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		JLabel lblyFirst = new JLabel("Y:");
-		jpMain.add(lblyFirst, gbc);
+		JLabel lblY = new JLabel("Enter y:");
+		lblY.setBounds(10, 55, 170, 25);
+		panel.add(lblY);
 
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		tfY = new JTextField(10);
-		tfY.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { 
-					if (tfY.getText().length() > 4) {
-						tooLargeNumberEntered(tfY);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {// pritisnut
-																										
-						return;
-					}
-					notNumberInserted(tfY);
-				}
-			}
-		});
-		jpMain.add(tfY, gbc);
+		JLabel lblR = new JLabel("Enter r:");
+		lblR.setBounds(10, 95, 170, 25);
+		panel.add(lblR);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		JLabel lblXSecond = new JLabel("Radius:");
-		jpMain.add(lblXSecond, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		tfWidth = new JTextField(10);
-		tfWidth.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { 
-					if (tfWidth.getText().length() > 4) {
-						tooLargeNumberEntered(tfWidth);
-					}
-				} else {
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
-																												
-						return;
-					}
-					notNumberInserted(tfWidth);
-				}
-			}
-		});
-		jpMain.add(tfWidth, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 3;
 		JLabel lblColor = new JLabel("Color:");
-		jpMain.add(lblColor, gbc);
+		lblColor.setBounds(10, 135, 170, 25);
+		panel.add(lblColor);
 
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		btnColor = new JButton(" ");
-		jpMain.add(btnColor, gbc);
-		btnColor.addActionListener(new ActionListener() {
+		JLabel lblFillColor = new JLabel("Fill Color:");
+		lblFillColor.setBounds(10, 175, 170, 25);
+		panel.add(lblFillColor);
+
+		txtX = new JTextField();
+		txtX.setBounds(200, 15, 224, 25);
+		txtX.setText(Integer.toString(hexagon.getHexagon().getX()));
+		panel.add(txtX);
+		txtX.setColumns(10);
+
+		txtY = new JTextField();
+		txtY.setBounds(200, 55, 224, 25);
+		txtY.setText(Integer.toString(hexagon.getHexagon().getY()));
+		panel.add(txtY);
+		txtY.setColumns(10);
+
+		txtR = new JTextField();
+		txtR.setBounds(200, 95, 224, 25);
+		txtR.setText(Integer.toString(hexagon.getHexagon().getR()));
+		panel.add(txtR);
+		txtR.setColumns(10);
+
+		btnColor = new JButton();
+		btnColor.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent ae) {
-				EditHexagonDialog.this.color(btnColor);
+			public void mouseClicked(MouseEvent arg0) {
+				setColor(btnColor);
 			}
 		});
+		btnColor.setBounds(200, 135, 224, 25);
+		btnColor.setBackground(hexagon.getHexagon().getBorderColor());
+		panel.add(btnColor);
 
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		JLabel lblFillColor = new JLabel("Fill color:");
-		jpMain.add(lblFillColor, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 4;
-		btnFillColor = new JButton(" ");
-		jpMain.add(btnFillColor, gbc);
-		btnFillColor.addActionListener(new ActionListener() {
+		btnFillColor = new JButton();
+		btnFillColor.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent ae) {
-				EditHexagonDialog.this.color(btnFillColor);
+			public void mouseClicked(MouseEvent arg0) {
+				setColor(btnFillColor);
 			}
 		});
+		btnFillColor.setBounds(200, 175, 224, 25);
+		btnFillColor.setBackground(hexagon.getHexagon().getAreaColor());
+		panel.add(btnFillColor);
 
-		JButton btnOk = new JButton("Save");
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 5;
-		jpMain.add(btnOk, gbc);
-
-		btnOk.addActionListener(new ActionListener() {
+		JButton btnOk = new JButton("Ok");
+		btnOk.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent ae) {
-				hexagon.moveTo(Integer.parseInt(tfX.getText()), Integer.parseInt(tfY.getText()));
-				hexagon.getHexagon().setR(Integer.parseInt(tfWidth.getText()));
-				hexagon.setColor(btnColor.getBackground());
-				hexagon.setFillColor(btnFillColor.getBackground());
+			public void mouseClicked(MouseEvent arg0) {
+				if (txtX.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter X!", "Error!", JOptionPane.WARNING_MESSAGE);
+					return;
+				} else if (txtY.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter Y!", "Error!", JOptionPane.WARNING_MESSAGE);
+					return;
+
+				} else if (txtR.getText().trim().length() == 0) {
+					JOptionPane.showMessageDialog(getContentPane(), "Enter r!", "Error!", JOptionPane.WARNING_MESSAGE);
+					return;
+				} else {
+					try {
+						int x1 = Integer.parseInt(txtX.getText().trim());
+						int y1 = Integer.parseInt(txtY.getText().trim());
+						int r1 = Integer.parseInt(txtR.getText().trim());
+
+						if (x1 <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "X has to be larger than 0", "Error!",
+									JOptionPane.WARNING_MESSAGE);
+						} else if (y1 <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "Y  has to be larger than 0", "Error!",
+									JOptionPane.WARNING_MESSAGE);
+						} else if (r1 <= 0) {
+							JOptionPane.showMessageDialog(getContentPane(), "r has to be larger than 0", "Error!",
+									JOptionPane.WARNING_MESSAGE);
+						} else {
+							hexagon.setColor(btnColor.getBackground());
+							hexagon.setFillColor(btnFillColor.getBackground());
+							hexagon.getHexagon().setX(x1);;
+							hexagon.getHexagon().setY(y1);
+							hexagon.getHexagon().setR(r1);
+							dispose();
+						}
+
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(getContentPane(), "X, Y and r have to be integers!", "Error!",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+		});
+		btnOk.setBounds(35, 230, 89, 25);
+		panel.add(btnOk);
+
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
-
-		this.setResizable(false);
-		this.pack();
-		this.setLocationRelativeTo(parent);
+		btnCancel.setBounds(248, 230, 89, 25);
+		panel.add(btnCancel);
 	}
 
-	private void color(JButton btnColor) {
-		JColorChooser jccColor = new JColorChooser();
-		Color color = jccColor.showDialog(null, "Choose color", btnColor.getBackground());
-
-		if (color != null)
-			btnColor.setBackground(color);
-
-	}
-
-	private void notNumberInserted(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Only number allowed!", "Error!", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
-	}
-
-	private void tooLargeNumberEntered(JTextField tf) {
-		JOptionPane.showMessageDialog(this, "Number is too large!", "Error!", JOptionPane.ERROR_MESSAGE);
-		tf.setText(tf.getText().substring(0, tf.getText().length() - 1));
-	}
-
-	public void setHexagon(HexagonAdapter hexagon) {
-		this.hexagon = hexagon;
-		this.tfX.setText(String.valueOf(hexagon.getHexagon().getX()));
-		this.tfY.setText(String.valueOf(hexagon.getHexagon().getY()));
-		this.tfWidth.setText(String.valueOf(hexagon.getHexagon().getR()));
-		this.btnColor.setBackground(hexagon.getColor());
-		this.btnFillColor.setBackground(hexagon.getFillColor());
+	public void setColor(JButton btnColor) {
+		JColorChooser jCCh = new JColorChooser();
+		Color col = jCCh.showDialog(null, "Choose Color!", Color.BLACK);
+		if (col != null) {
+			btnColor.setBackground(col);
+		}
 	}
 
 	@Override

@@ -83,11 +83,7 @@ public class Line extends Shape implements Moveable, Serializable {
 	
 	@Override
 	public Line clone() {
-		Point startingPoint = this.getStartingPoint().clone();
-		Point endingPoint = this.getEndingPoint().clone();
-		Line line = new Line(startingPoint, endingPoint, this.getColor());
-		line.setSelected(this.isSelected());
-		return line;
+		return new Line(this.startingPoint.clone(), this.endingPoint.clone(), this.getColor());
 	}
 
 	@Override
@@ -113,4 +109,13 @@ public class Line extends Shape implements Moveable, Serializable {
 		return "line:" + this.startingPoint + "-" + this.endingPoint + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() ;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Line) {
+			Line castedObj = (Line) obj;
+			return startingPoint.equals(castedObj.getStartingPoint()) && endingPoint.equals(castedObj.getEndingPoint());
+		}
+		return false;
+	}
+	
 }

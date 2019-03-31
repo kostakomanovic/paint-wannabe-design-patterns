@@ -1,51 +1,63 @@
 package main.model.command.edit;
 
+import main.model.ShapesModel;
 import main.model.command.Command;
-import main.model.shape.Point;
 import main.model.shape.Rectangle;
+import main.model.shape.base.Shape;
 
 public class EditRectangleCmd implements Command{
 
-	private Rectangle originalRectangle;
-	private Rectangle newRectangle;
-	private Rectangle oldRectangle = new Rectangle(new Point(), 0, 0);
+	private Rectangle oldState;
+	private Rectangle newState;
+	private Rectangle originalState;
+	private ShapesModel model;
+	private boolean fromLog;
 
-	public EditRectangleCmd(Rectangle original, Rectangle newState) {
-		this.originalRectangle = original;
-		this.newRectangle = newState;
+	public EditRectangleCmd(Rectangle oldState, Rectangle newState, ShapesModel model, boolean fromLog) {
+		this.oldState = oldState;
+		this.newState = newState;
+		this.model = model;
+		this.fromLog = fromLog;
 	}
+
 
 	@Override
 	public void execute() {
-		oldRectangle.getOrigin().setX(originalRectangle.getOrigin().getX());
-		oldRectangle.getOrigin().setY(originalRectangle.getOrigin().getY());
-		oldRectangle.setHeight(originalRectangle.getHeight());
-		oldRectangle.setWidth(originalRectangle.getWidth());
-		oldRectangle.setColor(originalRectangle.getColor());
-		oldRectangle.setFillColor(originalRectangle.getFillColor());
-
-		originalRectangle.getOrigin().setX(newRectangle.getOrigin().getX());
-		originalRectangle.getOrigin().setY(newRectangle.getOrigin().getY());
-		originalRectangle.setHeight(newRectangle.getHeight());
-		originalRectangle.setWidth(newRectangle.getWidth());
-		originalRectangle.setColor(newRectangle.getColor());
-		originalRectangle.setFillColor(newRectangle.getFillColor());
+		originalState = oldState.clone();
+		if (this.fromLog) {
+			for (Shape s : this.model.getShapes()) {
+				if (s.equals(this.oldState)) {
+					Rectangle r = (Rectangle) s;
+					this.oldState = r;
+					r.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
+					r.setWidth(newState.getWidth());
+					r.setHeight(newState.getHeight());
+					r.setColor(newState.getColor());
+					r.setFillColor(newState.getFillColor());
+				}
+			}
+		} else {
+			oldState.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
+			oldState.setWidth(newState.getWidth());
+			oldState.setHeight(newState.getHeight());
+			oldState.setColor(newState.getColor());
+			oldState.setFillColor(newState.getFillColor());
+		}
 	}
 
 	@Override
 	public void unexecute() {
-		originalRectangle.getOrigin().setX(oldRectangle.getOrigin().getX());
-		originalRectangle.getOrigin().setY(oldRectangle.getOrigin().getY());
-		originalRectangle.setHeight(oldRectangle.getHeight());
-		originalRectangle.setWidth(oldRectangle.getWidth());
-		originalRectangle.setColor(oldRectangle.getColor());
-		originalRectangle.setFillColor(oldRectangle.getFillColor());
+		oldState.moveTo(originalState.getOrigin().getX(), originalState.getOrigin().getY());
+		oldState.setWidth(originalState.getWidth());
+		oldState.setHeight(originalState.getHeight());
+		oldState.setColor(originalState.getColor());
+		oldState.setFillColor(originalState.getFillColor());
 	}
 	
 	@Override
 	public String toString() {
 		// edit,rectangle|oldRectangle_newRectangle
-		return "edit,rectangle|" + this.oldRectangle + "_" + this.newRectangle;
+		return "edit,rectangle|" + this.originalState + "_" + this.newState;
 	}
 
 	

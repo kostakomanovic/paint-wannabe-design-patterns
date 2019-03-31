@@ -82,7 +82,7 @@ public class PaintController extends Observable {
 			helpCommandExecution(addShape);
 			this.repaint();
 		} else if (this.mode.equals(PaintMode.LINE)) {
-			if(this.lineStartPoint == null) {
+			if (this.lineStartPoint == null) {
 				this.lineStartPoint = new Point(e.getX(), e.getY(), this.paint.getBtnColorBackground());
 			} else {
 				Point lineEndPoint = new Point(e.getX(), e.getY(), this.paint.getBtnColorBackground());
@@ -91,46 +91,53 @@ public class PaintController extends Observable {
 				AddShapeCmd addShape = new AddShapeCmd(line, this.model);
 				this.helpCommandExecution(addShape);
 			}
-		} 
-		else if (this.mode.equals(PaintMode.SQUARE)) {
-			String squareWidth = JOptionPane.showInputDialog(this.paint, "Enter square width:", "Square width", JOptionPane.QUESTION_MESSAGE);
-			if(squareWidth != null) {
+		} else if (this.mode.equals(PaintMode.SQUARE)) {
+			String squareWidth = JOptionPane.showInputDialog(this.paint, "Enter square width:", "Square width",
+					JOptionPane.QUESTION_MESSAGE);
+			if (squareWidth != null) {
 				int width = Integer.parseInt(squareWidth);
-				Square square = new Square(new Point(e.getX(), e.getY()), width,this.paint.getBtnColorBackground(),this.paint.getBtnFillColorBackground());
+				Square square = new Square(new Point(e.getX(), e.getY()), width, this.paint.getBtnColorBackground(),
+						this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(square, this.model);
 				this.helpCommandExecution(addShape);
 			}
 		} else if (this.mode.equals(PaintMode.RECTANGLE)) {
 			JTextField width = new JTextField();
 			JTextField height = new JTextField();
-			Object[] widthHeight = {"Width:", width, "Height:", height};
-			int option = JOptionPane.showConfirmDialog(this.paint, widthHeight, "Choose rectangle size", JOptionPane.OK_CANCEL_OPTION);
-			if(option == JOptionPane.OK_OPTION) {
-				if(width.getText() != null && height.getText() != null) {
-					Rectangle rectangle = new Rectangle(new Point(e.getX(), e.getY()), Integer.parseInt(width.getText()), Integer.parseInt(height.getText()), this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
+			Object[] widthHeight = { "Width:", width, "Height:", height };
+			int option = JOptionPane.showConfirmDialog(this.paint, widthHeight, "Choose rectangle size",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				if (width.getText() != null && height.getText() != null) {
+					Rectangle rectangle = new Rectangle(new Point(e.getX(), e.getY()),
+							Integer.parseInt(width.getText()), Integer.parseInt(height.getText()),
+							this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
 					AddShapeCmd addShape = new AddShapeCmd(rectangle, this.model);
-					this.helpCommandExecution(addShape);					
+					this.helpCommandExecution(addShape);
 				}
-				
+
 			}
 		} else if (this.mode.equals(PaintMode.CIRCLE)) {
-			String circleRadius = JOptionPane.showInputDialog(this.paint, "Enter circle radius:", "Circle radius", JOptionPane.QUESTION_MESSAGE);
-			if(circleRadius != null) {
+			String circleRadius = JOptionPane.showInputDialog(this.paint, "Enter circle radius:", "Circle radius",
+					JOptionPane.QUESTION_MESSAGE);
+			if (circleRadius != null) {
 				int radius = Integer.parseInt(circleRadius);
-				Circle circle = new Circle(new Point(e.getX(), e.getY()), radius, this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
+				Circle circle = new Circle(new Point(e.getX(), e.getY()), radius, this.paint.getBtnColorBackground(),
+						this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(circle, this.model);
 				this.helpCommandExecution(addShape);
 			}
 		} else if (this.mode.equals(PaintMode.HEXAGON)) {
-			String hexagonRadius = JOptionPane.showInputDialog(this.paint, "Enter hexagon radius:", "Hexagon radius", JOptionPane.QUESTION_MESSAGE);
-			if(hexagonRadius != null) {
+			String hexagonRadius = JOptionPane.showInputDialog(this.paint, "Enter hexagon radius:", "Hexagon radius",
+					JOptionPane.QUESTION_MESSAGE);
+			if (hexagonRadius != null) {
 				int radius = Integer.parseInt(hexagonRadius);
-				HexagonAdapter hexagon = new HexagonAdapter(new Point(e.getX(), e.getY()), radius, this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
+				HexagonAdapter hexagon = new HexagonAdapter(new Point(e.getX(), e.getY()), radius,
+						this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(hexagon, this.model);
 				this.helpCommandExecution(addShape);
 			}
-		}
-		else if (this.mode.equals(PaintMode.SELECT)) {
+		} else if (this.mode.equals(PaintMode.SELECT)) {
 			this.helpSelect(e.getX(), e.getY());
 		}
 
@@ -156,7 +163,7 @@ public class PaintController extends Observable {
 		JFileChooser jFileChooser = new JFileChooser();
 		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			SaveManager saveManager = new SaveManager(new SaveLog());
-			saveManager.save(new ArrayList<Object>(this.commands), jFileChooser.getSelectedFile().getAbsolutePath());
+			saveManager.save(new ArrayList<Object>(Collections.list(this.paint.getLogListModel().elements())), jFileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 
@@ -182,7 +189,7 @@ public class PaintController extends Observable {
 			this.repaint();
 		}
 	}
-	
+
 	/**
 	 * Handles to front command
 	 */
@@ -191,7 +198,7 @@ public class PaintController extends Observable {
 		ToFrontCmd command = new ToFrontCmd(selectedShape, this.model);
 		this.helpCommandExecution(command);
 	}
-	
+
 	/**
 	 * Handles to back command
 	 */
@@ -200,7 +207,7 @@ public class PaintController extends Observable {
 		ToBackCmd command = new ToBackCmd(selectedShape, this.model);
 		this.helpCommandExecution(command);
 	}
-	
+
 	/**
 	 * Handles bring to front command
 	 */
@@ -235,17 +242,19 @@ public class PaintController extends Observable {
 	 * Handles mouse click on delete button
 	 */
 	public void handleDelete() {
-		String[] options = {"Cancel", "Yes"};
-		int option = JOptionPane.showOptionDialog(this.paint, "Are you sure you want to delete selected shape/shapes?", "Delete shapes?", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-		if(option == 1) {
+		String[] options = { "Cancel", "Yes" };
+		int option = JOptionPane.showOptionDialog(this.paint, "Are you sure you want to delete selected shape/shapes?",
+				"Delete shapes?", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		if (option == 1) {
 			List<Shape> deletedShapes = new ArrayList<Shape>();
-			for(Shape shape : this.model.getShapes()) {
-				if(shape.isSelected()) deletedShapes.add(shape);
+			for (Shape shape : this.model.getShapes()) {
+				if (shape.isSelected())
+					deletedShapes.add(shape);
 			}
 			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(deletedShapes, this.model);
 			this.helpCommandExecution(deleteCmd);
 			this.emitChangesToObservers();
-			this.deselectAll();			
+			this.deselectAll();
 		}
 	}
 
@@ -274,56 +283,52 @@ public class PaintController extends Observable {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
 		if (selectedShape instanceof Point) {
 			Point point = (Point) selectedShape;
-			EditPointDialog dialog = new EditPointDialog(this.paint);
-			dialog.setPoint(point.clone());
+			Point clone = point.clone();
+			EditPointDialog dialog = new EditPointDialog(clone);
 			dialog.setVisible(true);
-			if (dialog.getEditedShape() != null) {
-				Command command = new EditPointCmd(point, (Point) dialog.getEditedShape());
-				this.helpCommandExecution(command);
-			}
+			Command command = new EditPointCmd(point, clone, null, false);
+			this.helpCommandExecution(command);
 		} else if (selectedShape instanceof Line) {
 			Line line = (Line) selectedShape;
-			EditLineDialog dialog = new EditLineDialog(this.paint);
-			dialog.setLine(line.clone());
+			EditLineDialog dialog = new EditLineDialog(line);
 			dialog.setVisible(true);
-			if(dialog.getEditedShape() != null) {
-				Command command = new EditLineCmd(line, (Line) dialog.getEditedShape());
+			if (dialog.getEditedShape() != null) {
+				Command command = new EditLineCmd(line, (Line) dialog.getEditedShape(), null, false);
 				this.helpCommandExecution(command);
 			}
 		} else if (selectedShape instanceof Rectangle) {
 			Rectangle rectangle = (Rectangle) selectedShape;
-			EditRectangleDialog dialog = new EditRectangleDialog(this.paint);
-			dialog.setRectangle(rectangle.clone());
+			Rectangle clone = rectangle.clone();
+			EditRectangleDialog dialog = new EditRectangleDialog(clone);
 			dialog.setVisible(true);
-			if(dialog.getEditedShape() != null) {
-				Command command = new EditRectangleCmd(rectangle, (Rectangle) dialog.getEditedShape());
+			if (dialog.getEditedShape() != null) {
+				Command command = new EditRectangleCmd(rectangle, clone, null, false);
 				this.helpCommandExecution(command);
 			}
 		} else if (selectedShape instanceof Square) {
 			Square square = (Square) selectedShape;
-			EditSquareDialog dialog = new EditSquareDialog(this.paint);
-			dialog.setSquare(square.clone());
+			Square clone = square.clone();
+			EditSquareDialog dialog = new EditSquareDialog(clone);
 			dialog.setVisible(true);
-			if(dialog.getEditedShape() != null) {
-				Command command = new EditSquareCmd(square, (Square)dialog.getEditedShape());
+			if (dialog.getEditedShape() != null) {
+				Command command = new EditSquareCmd(square, clone, null, false);
 				this.helpCommandExecution(command);
 			}
 		} else if (selectedShape instanceof Circle) {
 			Circle circle = (Circle) selectedShape;
-			EditCircleDialog dialog = new EditCircleDialog(this.paint);
-			dialog.setCircle(circle.clone());
+			Circle clone = circle.clone();
+			EditCircleDialog dialog = new EditCircleDialog(clone);
 			dialog.setVisible(true);
-			if(dialog.getEditedShape() != null) {
-				Command command = new EditCircleCmd(circle, (Circle)dialog.getEditedShape());
+			if (dialog.getEditedShape() != null) {
+				Command command = new EditCircleCmd(circle, (Circle) dialog.getEditedShape(), null, false);
 				this.helpCommandExecution(command);
 			}
 		} else if (selectedShape instanceof HexagonAdapter) {
 			HexagonAdapter hexagon = (HexagonAdapter) selectedShape;
-			EditHexagonDialog dialog = new EditHexagonDialog(this.paint);
-			dialog.setHexagon(hexagon.clone().clone());
+			EditHexagonDialog dialog = new EditHexagonDialog(hexagon);
 			dialog.setVisible(true);
-			if(dialog.getEditedShape() != null) {
-				Command command = new EditHexagonAdapterCmd(hexagon, (HexagonAdapter)dialog.getEditedShape());
+			if (dialog.getEditedShape() != null) {
+				Command command = new EditHexagonAdapterCmd(hexagon, (HexagonAdapter)dialog.getEditedShape(), null, false);
 				this.helpCommandExecution(command);
 			}
 
@@ -333,11 +338,11 @@ public class PaintController extends Observable {
 		this.emitChangesToObservers();
 		this.repaint();
 	}
-	
+
 	public void chooseFillColor(JButton btnColor) {
 		Color color = JColorChooser.showDialog(this.paint, "Choose fill color", this.paint.getBtnFillColorBackground());
-		
-		if(color != null) {
+
+		if (color != null) {
 			btnColor.setBackground(color);
 			this.paint.setBtnFillColorBackground(color);
 		}
@@ -345,13 +350,13 @@ public class PaintController extends Observable {
 
 	public void chooseColor(JButton btnColor) {
 		Color color = JColorChooser.showDialog(this.paint, "Choose color", this.paint.getBtnColorBackground());
-		
-		if(color != null) {
+
+		if (color != null) {
 			btnColor.setBackground(color);
 			this.paint.setBtnColorBackground(color);
 		}
 	}
-	
+
 	/**
 	 * Emits changes to all listeners (observers)
 	 */
@@ -364,13 +369,13 @@ public class PaintController extends Observable {
 		command.execute();
 		this.commands.add(command);
 		this.currentCommandIndex++;
-		this.paint.getLogListModel().addElement(this.commands.get(this.currentCommandIndex));
+		this.paint.getLogListModel().addElement(String.valueOf(this.commands.get(this.currentCommandIndex)));
 		this.setUndoRedoNavigation();
 	}
 
 	public void undo() {
 		this.commands.get(this.currentCommandIndex).unexecute();
-		this.paint.getLogListModel().removeElement(this.commands.get(this.currentCommandIndex));
+		this.paint.getLogListModel().remove(this.paint.getLogListModel().size() - 1);
 		this.currentCommandIndex--;
 		this.setUndoRedoNavigation();
 		this.repaint();
@@ -379,7 +384,7 @@ public class PaintController extends Observable {
 	public void redo() {
 		this.currentCommandIndex++;
 		this.commands.get(currentCommandIndex).execute();
-		this.paint.getLogListModel().addElement(this.commands.get(this.currentCommandIndex));
+		this.paint.getLogListModel().addElement(String.valueOf(this.commands.get(this.currentCommandIndex)));
 		this.setUndoRedoNavigation();
 		this.repaint();
 	}

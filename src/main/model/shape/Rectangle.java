@@ -72,10 +72,14 @@ public class Rectangle extends Square implements Moveable, Serializable {
 
 	@Override
 	public void select(Graphics g) {
-		new Line(this.getOrigin(), new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY())).select(g);
-		new Line(this.getOrigin(), new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight())).select(g);
-		new Line(new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY()), diagonal().getEndingPoint()).select(g);
-		new Line(new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight()), diagonal().getEndingPoint()).select(g);
+		new Line(this.getOrigin(), new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY()))
+				.select(g);
+		new Line(this.getOrigin(), new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight()))
+				.select(g);
+		new Line(new Point(this.getOrigin().getX() + this.getWidth(), this.getOrigin().getY()),
+				diagonal().getEndingPoint()).select(g);
+		new Line(new Point(this.getOrigin().getX(), this.getOrigin().getY() + this.getHeight()),
+				diagonal().getEndingPoint()).select(g);
 	}
 
 	public int getHeight() {
@@ -85,12 +89,24 @@ public class Rectangle extends Square implements Moveable, Serializable {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
+
 	@Override
 	public String toString() {
 		// rectangle:origin:width:height:rgb:fillRgb
-		return "rectangle:" + this.origin + ":" + this.getWidth() + ":" + this.getHeight() + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
+		return "rectangle:" + this.origin + ":" + this.getWidth() + ":" + this.getHeight() + ":"
+				+ this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":"
+				+ this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + ","
+				+ this.getFillColor().getBlue();
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Rectangle) {
+			Rectangle castedObj = (Rectangle) obj;
+			return origin.equals(castedObj.getOrigin()) && super.getWidth() == castedObj.getWidth()
+					&& height == castedObj.getHeight();
+		}
+		return false;
 	}
 
 }

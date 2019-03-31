@@ -114,5 +114,14 @@ public class Square extends ArealShape implements Moveable, Serializable {
 		// square: origin : width : r,g,b : r,g,b
 		return "square:" + this.origin + ":" + this.width + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Square) {
+			Square castedObj = (Square) obj;
+			return origin.equals(castedObj.getOrigin()) && width == castedObj.getWidth();
+		}
+		return false;
+	}
 
 }
