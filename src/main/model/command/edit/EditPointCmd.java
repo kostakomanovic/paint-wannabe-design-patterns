@@ -35,8 +35,8 @@ public class EditPointCmd implements Command {
 	
 	@Override
 	public String toString() {
-		// update,oldPoint_newPoint
-		return "update," + this.oldPoint + "_" + this.newPoint;		
+		// edit,point|oldPoint_newPoint
+		return "edit,point|" + this.oldPoint + "_" + this.newPoint;		
 	}
 
 }

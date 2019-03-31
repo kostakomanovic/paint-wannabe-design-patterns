@@ -41,4 +41,10 @@ public class EditHexagonAdapterCmd implements Command {
 		originalHexagon.setFillColor(oldHexagon.getFillColor());
 	}
 
+	@Override
+	public String toString() {
+		// edit,hexagon|oldHexagon_newHexagon
+		return "edit,hexagon|" + this.oldHexagon + "_" + this.newHexagon;
+	}
+	
 }

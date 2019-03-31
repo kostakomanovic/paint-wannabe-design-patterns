@@ -41,8 +41,8 @@ public class EditLineCmd implements Command{
 	
 	@Override
 	public String toString() {
-		// update,oldLine_newLine
-		return "update," + this.oldLine + "_" + this.newLine;
+		// edit,line|oldLine_newLine
+		return "edit,line|" + this.oldLine + "_" + this.newLine;
 	}
 
 }

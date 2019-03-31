@@ -269,7 +269,7 @@ public class PaintController extends Observable {
 		if (selectedShape instanceof Point) {
 			Point point = (Point) selectedShape;
 			EditPointDialog dialog = new EditPointDialog(this.paint);
-			dialog.setPoint(point.clone().clone());
+			dialog.setPoint(point.clone());
 			dialog.setVisible(true);
 			if (dialog.getEditedShape() != null) {
 				Command command = new EditPointCmd(point, (Point) dialog.getEditedShape());

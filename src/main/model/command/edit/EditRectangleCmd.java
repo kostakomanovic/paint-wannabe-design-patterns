@@ -42,4 +42,11 @@ public class EditRectangleCmd implements Command{
 		originalRectangle.setFillColor(oldRectangle.getFillColor());
 	}
 	
+	@Override
+	public String toString() {
+		// edit,rectangle|oldRectangle_newRectangle
+		return "edit,rectangle|" + this.oldRectangle + "_" + this.newRectangle;
+	}
+
+	
 }

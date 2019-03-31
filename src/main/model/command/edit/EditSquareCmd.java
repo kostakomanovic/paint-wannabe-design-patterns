@@ -39,5 +39,11 @@ public class EditSquareCmd implements Command {
 		originalSquare.setColor(oldSquare.getColor());
 		originalSquare.setFillColor(oldSquare.getFillColor());
 	}
+	
+	@Override
+	public String toString() {
+		// edit,square|oldSquare_newSquare
+		return "edit,square|" + this.oldSquare + "_" + this.newSquare;
+	}
 
 }

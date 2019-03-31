@@ -38,5 +38,12 @@ public class EditCircleCmd implements Command {
 		originalCircle.setColor(oldCircle.getColor());
 		originalCircle.setFillColor(oldCircle.getFillColor());
 	}
+	
+	@Override
+	public String toString() {
+		// edit,circle|oldCircle_newCircle
+		return "edit,circle|" + this.oldCircle + "_" + this.newCircle;
+	}
+
 
 }

@@ -142,9 +142,9 @@ public class EditPointDialog extends JDialog implements EditDialog {
 
 	public void setPoint(Point point) {
 		this.point = point;
-		this.tfX.setText(String.valueOf(this.point.getX()));
-		this.tfY.setText(String.valueOf(this.point.getY()));
-		this.btnColor.setBackground(this.point.getColor());
+		this.tfX.setText(String.valueOf(point.getX()));
+		this.tfY.setText(String.valueOf(point.getY()));
+		this.btnColor.setBackground(point.getColor());
 	}
 
 	private void color(JButton btnColor) {
@@ -158,8 +158,6 @@ public class EditPointDialog extends JDialog implements EditDialog {
 
 	@Override
 	public Shape getEditedShape() {
-		this.point.moveTo(Integer.parseInt(this.tfX.getText()), Integer.parseInt(this.tfY.getText()));
-		this.point.setColor(this.btnColor.getBackground());
 		return this.point;
 	}
 
