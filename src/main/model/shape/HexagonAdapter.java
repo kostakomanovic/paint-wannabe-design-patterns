@@ -93,4 +93,10 @@ public class HexagonAdapter extends ArealShape implements Moveable, Serializable
 		this.hexagon.setY(this.hexagon.getY() + y);
 	}
 
+	@Override
+	public String toString() {
+		// hexagon:center:radius:r,g,b:fillrgb
+		return "hexagon:" + new Point(this.getHexagon().getX(), this.getHexagon().getY()) + ":" + this.getHexagon().getR() + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
+
+	}
 }

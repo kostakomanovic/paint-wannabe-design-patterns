@@ -108,5 +108,11 @@ public class Square extends ArealShape implements Moveable, Serializable {
 	public void moveFor(int x, int y) {
 		this.getOrigin().moveFor(x, y);
 	}
+	
+	@Override
+	public String toString() {
+		// square: origin : width : r,g,b : r,g,b
+		return "square:" + this.origin + ":" + this.width + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
+	}
 
 }

@@ -95,5 +95,11 @@ public class Circle extends ArealShape implements Moveable, Serializable {
 		this.getCenter().setX(this.getCenter().getX() + x);
 		this.getCenter().setY(this.getCenter().getY() + y);
 	}
+	
+	@Override
+	public String toString() {
+		// circle:origin:radius:rgb:fillRgb
+		return "circle:" + this.center + ":" + this.radius + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
+	}
 
 }

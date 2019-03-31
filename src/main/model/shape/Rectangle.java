@@ -85,5 +85,12 @@ public class Rectangle extends Square implements Moveable, Serializable {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+	
+	@Override
+	public String toString() {
+		// rectangle:origin:width:height:rgb:fillRgb
+		return "rectangle:" + this.origin + ":" + this.getWidth() + ":" + this.getHeight() + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() + ":" + this.getFillColor().getRed() + "," + this.getFillColor().getGreen() + "," + this.getFillColor().getBlue();
+
+	}
 
 }

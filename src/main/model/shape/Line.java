@@ -110,7 +110,7 @@ public class Line extends Shape implements Moveable, Serializable {
 	@Override
 	public String toString() {
 		// line,point1-point2
-		return "line," + this.startingPoint + "-" + this.endingPoint;
+		return "line:" + this.startingPoint + "-" + this.endingPoint + ":" + this.getColor().getRed() + "," + this.getColor().getGreen() + "," + this.getColor().getBlue() ;
 	}
 
 }
