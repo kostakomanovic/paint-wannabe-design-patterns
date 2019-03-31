@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -75,16 +77,16 @@ public class PaintController extends Observable {
 	public void handleMouseClick(MouseEvent e) {
 
 		if (this.mode.equals(PaintMode.POINT)) {
-			Point point = new Point(e.getX(), e.getY(), Color.BLACK);
+			Point point = new Point(e.getX(), e.getY(), this.paint.getBtnColorBackground());
 			AddShapeCmd addShape = new AddShapeCmd(point, this.model);
 			helpCommandExecution(addShape);
 			this.repaint();
 		} else if (this.mode.equals(PaintMode.LINE)) {
 			if(this.lineStartPoint == null) {
-				this.lineStartPoint = new Point(e.getX(), e.getY(), Color.black);
+				this.lineStartPoint = new Point(e.getX(), e.getY(), this.paint.getBtnColorBackground());
 			} else {
-				Point lineEndPoint = new Point(e.getX(), e.getY(), Color.black);
-				Line line = new Line(this.lineStartPoint.clone(), lineEndPoint, Color.black);
+				Point lineEndPoint = new Point(e.getX(), e.getY(), this.paint.getBtnColorBackground());
+				Line line = new Line(this.lineStartPoint.clone(), lineEndPoint, this.paint.getBtnColorBackground());
 				this.lineStartPoint = null;
 				AddShapeCmd addShape = new AddShapeCmd(line, this.model);
 				this.helpCommandExecution(addShape);
@@ -94,7 +96,7 @@ public class PaintController extends Observable {
 			String squareWidth = JOptionPane.showInputDialog(this.paint, "Enter square width:", "Square width", JOptionPane.QUESTION_MESSAGE);
 			if(squareWidth != null) {
 				int width = Integer.parseInt(squareWidth);
-				Square square = new Square(new Point(e.getX(), e.getY()), width, Color.black, Color.black);
+				Square square = new Square(new Point(e.getX(), e.getY()), width,this.paint.getBtnColorBackground(),this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(square, this.model);
 				this.helpCommandExecution(addShape);
 			}
@@ -105,7 +107,7 @@ public class PaintController extends Observable {
 			int option = JOptionPane.showConfirmDialog(this.paint, widthHeight, "Choose rectangle size", JOptionPane.OK_CANCEL_OPTION);
 			if(option == JOptionPane.OK_OPTION) {
 				if(width.getText() != null && height.getText() != null) {
-					Rectangle rectangle = new Rectangle(new Point(e.getX(), e.getY()), Integer.parseInt(width.getText()), Integer.parseInt(height.getText()), Color.black, Color.black);
+					Rectangle rectangle = new Rectangle(new Point(e.getX(), e.getY()), Integer.parseInt(width.getText()), Integer.parseInt(height.getText()), this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
 					AddShapeCmd addShape = new AddShapeCmd(rectangle, this.model);
 					this.helpCommandExecution(addShape);					
 				}
@@ -115,7 +117,7 @@ public class PaintController extends Observable {
 			String circleRadius = JOptionPane.showInputDialog(this.paint, "Enter circle radius:", "Circle radius", JOptionPane.QUESTION_MESSAGE);
 			if(circleRadius != null) {
 				int radius = Integer.parseInt(circleRadius);
-				Circle circle = new Circle(new Point(e.getX(), e.getY()), radius, Color.black, Color.black);
+				Circle circle = new Circle(new Point(e.getX(), e.getY()), radius, this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(circle, this.model);
 				this.helpCommandExecution(addShape);
 			}
@@ -123,7 +125,7 @@ public class PaintController extends Observable {
 			String hexagonRadius = JOptionPane.showInputDialog(this.paint, "Enter hexagon radius:", "Hexagon radius", JOptionPane.QUESTION_MESSAGE);
 			if(hexagonRadius != null) {
 				int radius = Integer.parseInt(hexagonRadius);
-				HexagonAdapter hexagon = new HexagonAdapter(new Point(e.getX(), e.getY()), radius, Color.black, Color.white);
+				HexagonAdapter hexagon = new HexagonAdapter(new Point(e.getX(), e.getY()), radius, this.paint.getBtnColorBackground(), this.paint.getBtnFillColorBackground());
 				AddShapeCmd addShape = new AddShapeCmd(hexagon, this.model);
 				this.helpCommandExecution(addShape);
 			}
@@ -331,7 +333,25 @@ public class PaintController extends Observable {
 		this.emitChangesToObservers();
 		this.repaint();
 	}
+	
+	public void chooseFillColor(JButton btnColor) {
+		Color color = JColorChooser.showDialog(this.paint, "Choose fill color", this.paint.getBtnFillColorBackground());
+		
+		if(color != null) {
+			btnColor.setBackground(color);
+			this.paint.setBtnFillColorBackground(color);
+		}
+	}
 
+	public void chooseColor(JButton btnColor) {
+		Color color = JColorChooser.showDialog(this.paint, "Choose color", this.paint.getBtnColorBackground());
+		
+		if(color != null) {
+			btnColor.setBackground(color);
+			this.paint.setBtnColorBackground(color);
+		}
+	}
+	
 	/**
 	 * Emits changes to all listeners (observers)
 	 */

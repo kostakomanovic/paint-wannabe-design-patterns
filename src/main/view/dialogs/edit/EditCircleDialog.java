@@ -45,8 +45,8 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		JLabel lblXPrva = new JLabel("X:");
-		jpMain.add(lblXPrva, gbc);
+		JLabel lblXFirst = new JLabel("X:");
+		jpMain.add(lblXFirst, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 0;
@@ -54,13 +54,13 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 		tfX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { // unet je broj
+				if (Character.isDigit(ke.getKeyChar())) {
 					if (tfX.getText().length() > 4) {
 						tooLargeNumberEntered(tfX);
 					}
-				} else { // nije unet broj
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { // pritisnut
-																												// backspace
+				} else { 
+					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { 
+																												
 						return;
 					}
 					notNumberInserted(tfX);
@@ -71,8 +71,8 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		JLabel lblYPrva = new JLabel("Y:");
-		jpMain.add(lblYPrva, gbc);
+		JLabel lblYFirst = new JLabel("Y:");
+		jpMain.add(lblYFirst, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 1;
@@ -80,13 +80,13 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 		tfY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { // unet je broj
+				if (Character.isDigit(ke.getKeyChar())) {
 					if (tfY.getText().length() > 4) {
 						tooLargeNumberEntered(tfY);
 					}
-				} else { // nije unet broj
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { // pritisnut
-																												// backspace
+				} else { 
+					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
+																											
 						return;
 					}
 					notNumberInserted(tfY);
@@ -97,8 +97,8 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		JLabel lblXDruga = new JLabel("Poluprecnik:");
-		jpMain.add(lblXDruga, gbc);
+		JLabel lblXSecond = new JLabel("Radius:");
+		jpMain.add(lblXSecond, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 2;
@@ -106,13 +106,13 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 		tfRadius.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent ke) {
-				if (Character.isDigit(ke.getKeyChar())) { // unet je broj
+				if (Character.isDigit(ke.getKeyChar())) { 
 					if (tfRadius.getText().length() > 4) {
 						tooLargeNumberEntered(tfRadius);
 					}
-				} else { // nije unet broj
-					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) { // pritisnut
-																												// backspace
+				} else {
+					if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER) {
+																											
 						return;
 					}
 					notNumberInserted(tfRadius);
@@ -123,8 +123,8 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 		gbc.gridx = 0;
 		gbc.gridy = 3;
-		JLabel lblBojaOkvira = new JLabel("Color:");
-		jpMain.add(lblBojaOkvira, gbc);
+		JLabel lblColor = new JLabel("Color:");
+		jpMain.add(lblColor, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 3;
@@ -139,8 +139,8 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		JLabel lblBoja = new JLabel("Fill Color:");
-		jpMain.add(lblBoja, gbc);
+		JLabel lblFillColor = new JLabel("Fill Color:");
+		jpMain.add(lblFillColor, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 4;
@@ -179,7 +179,7 @@ public class EditCircleDialog extends JDialog implements EditDialog {
 
 	private void color(JButton btnColor) {
 		JColorChooser jccUnutrasnjost = new JColorChooser();
-		Color colorUnutrasnjost = jccUnutrasnjost.showDialog(null, "Izaberite boju", btnColor.getBackground());
+		Color colorUnutrasnjost = jccUnutrasnjost.showDialog(null, "Choose color", btnColor.getBackground());
 
 		if (colorUnutrasnjost != null)
 			btnColor.setBackground(colorUnutrasnjost);

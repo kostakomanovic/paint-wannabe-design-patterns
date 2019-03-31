@@ -88,6 +88,10 @@ public class Paint extends JFrame implements Observer {
 	private final JPanel logInfoPanel = new JPanel();
 	private final JLabel lblMode = new JLabel(" ");
 	private final JLabel lblXY = new JLabel(" ");
+	private final JButton btnColor = new JButton("                 ");
+	private final JButton btnFillColor = new JButton("                 ");
+	private final JLabel lblColor = new JLabel("Color:");
+	private final JLabel lblFillColor = new JLabel("Fill Color:");
 
 	public Paint(int width, int height) {
 		this.setSize(698, 546);
@@ -139,6 +143,24 @@ public class Paint extends JFrame implements Observer {
 		this.bottomLogPanel.setBackground(Color.red);
 		this.rightShapesPanel.setBackground(Color.yellow);
 		this.leftBringToPanel.setBackground(Color.GREEN);
+		
+		this.btnColor.setBackground(Color.BLACK);
+		this.btnFillColor.setBackground(Color.black);
+		
+		btnColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.chooseColor(btnColor);
+			}
+		});
+		
+		btnFillColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.chooseFillColor(btnFillColor);
+			}
+		});
+		
 
 		mainPanel.add(this.topCommandsPanel, BorderLayout.NORTH);
 
@@ -298,6 +320,15 @@ public class Paint extends JFrame implements Observer {
 		
 		leftBringToPanel.add(btnBringToBack);
 		
+		leftBringToPanel.add(lblColor);
+		
+		leftBringToPanel.add(btnColor);
+		
+		leftBringToPanel.add(lblFillColor);
+		btnFillColor.setVerticalAlignment(SwingConstants.BOTTOM);
+		
+		leftBringToPanel.add(btnFillColor);
+		
 		tbtnLine.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -398,6 +429,22 @@ public class Paint extends JFrame implements Observer {
 		this.btnSelect.setEnabled(shapes.size() > 0);
 		this.enableBringToButtons(counter == 1);
 		}
+	}
+	
+	public void setBtnColorBackground(Color color) {
+		this.btnColor.setBackground(color);
+	}
+	
+	public void setBtnFillColorBackground(Color color) {
+		this.btnFillColor.setBackground(color);
+	}
+	
+	public Color getBtnColorBackground() {
+		return this.btnColor.getBackground();
+	}
+	
+	public Color getBtnFillColorBackground() {
+		return this.btnFillColor.getBackground();
 	}
 
 }
