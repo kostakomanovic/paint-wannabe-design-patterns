@@ -32,26 +32,25 @@ public class LogMapper {
 
 		for (String shape : shapes) {
 			String type = shape.split(":")[0].split(",")[0];
-			
 			if (type.equals("point")) {
 				deletedShapes.add(getPoint(shape));
 			} else if (type.equals("line")) {
 				String[] points = shape.split(":")[1].split("-");
 				deletedShapes.add(getLine(getPoint(points[0]), getPoint(points[1]), shape.split(":")[2]));
 			} else if (type.equals("square")) {
-				String[] split = log.split(":");
+				String[] split = shape.split(":");
 				deletedShapes.add(getSquare(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
 						split[4].split("_")[0]));
-			} else if (shape.equals("rectangle")) {
-				String[] split = log.split(":");
+			} else if (type.equals("rectangle")) {
+				String[] split = shape.split(":");
 				deletedShapes.add(getRectangle(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
 						split[4].split("_")[0], split[5].split("_")[0]));
-			} else if (shape.equals("circle")) {
-				String[] split = log.split(":");
+			} else if (type.equals("circle")) {
+				String[] split = shape.split(":");
 				deletedShapes.add(getCircle(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
 						split[4].split("_")[0]));
-			} else if (shape.equals("hexagon")) {
-				String[] split = log.split(":");
+			} else if (type.equals("hexagon")) {
+				String[] split = shape.split(":");
 				deletedShapes.add(getHexagon(getPoint(split[1]), split[2].split("_")[0], split[3].split("_")[0],
 						split[4].split("_")[0]));
 			}
