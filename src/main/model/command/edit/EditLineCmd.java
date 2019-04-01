@@ -22,29 +22,29 @@ public class EditLineCmd implements Command {
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
+		this.originalState = this.oldState.clone();
 		if (this.fromLog) {
 			for (Shape s : this.model.getShapes()) {
 				if (s.equals(this.oldState)) {
 					Line l = (Line) s;
 					this.oldState = l;
-					l.moveBothPoints(newState.getStartingPoint().getX(), newState.getStartingPoint().getY(),
-							newState.getEndingPoint().getX(), newState.getEndingPoint().getY());
-					l.setColor(newState.getColor());
+					l.moveBothPoints(this.newState.getStartingPoint().getX(), this.newState.getStartingPoint().getY(),
+							this.newState.getEndingPoint().getX(), this.newState.getEndingPoint().getY());
+					l.setColor(this.newState.getColor());
 				}
 			}
 		} else {
-			oldState.moveBothPoints(newState.getStartingPoint().getX(), newState.getStartingPoint().getY(),
-					newState.getEndingPoint().getX(), newState.getEndingPoint().getY());
-			oldState.setColor(newState.getColor());
+			this.oldState.moveBothPoints(this.newState.getStartingPoint().getX(), this.newState.getStartingPoint().getY(),
+					this.newState.getEndingPoint().getX(), this.newState.getEndingPoint().getY());
+			this.oldState.setColor(this.newState.getColor());
 		}
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.moveBothPoints(originalState.getStartingPoint().getX(), originalState.getStartingPoint().getY(),
-				originalState.getEndingPoint().getX(), originalState.getEndingPoint().getY());
-		oldState.setColor(originalState.getColor());
+		this.oldState.moveBothPoints(this.originalState.getStartingPoint().getX(), this.originalState.getStartingPoint().getY(),
+				this.originalState.getEndingPoint().getX(), this.originalState.getEndingPoint().getY());
+		this.oldState.setColor(this.originalState.getColor());
 	}
 
 	@Override

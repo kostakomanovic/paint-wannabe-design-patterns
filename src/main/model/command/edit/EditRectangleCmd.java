@@ -23,35 +23,35 @@ public class EditRectangleCmd implements Command{
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
+		this.originalState = this.oldState.clone();
 		if (this.fromLog) {
 			for (Shape s : this.model.getShapes()) {
 				if (s.equals(this.oldState)) {
 					Rectangle r = (Rectangle) s;
 					this.oldState = r;
-					r.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
-					r.setWidth(newState.getWidth());
-					r.setHeight(newState.getHeight());
-					r.setColor(newState.getColor());
-					r.setFillColor(newState.getFillColor());
+					r.moveTo(this.newState.getOrigin().getX(), this.newState.getOrigin().getY());
+					r.setWidth(this.newState.getWidth());
+					r.setHeight(this.newState.getHeight());
+					r.setColor(this.newState.getColor());
+					r.setFillColor(this.newState.getFillColor());
 				}
 			}
 		} else {
-			oldState.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
-			oldState.setWidth(newState.getWidth());
-			oldState.setHeight(newState.getHeight());
-			oldState.setColor(newState.getColor());
-			oldState.setFillColor(newState.getFillColor());
+			this.oldState.moveTo(this.newState.getOrigin().getX(), this.newState.getOrigin().getY());
+			this.oldState.setWidth(this.newState.getWidth());
+			this.oldState.setHeight(this.newState.getHeight());
+			this.oldState.setColor(this.newState.getColor());
+			this.oldState.setFillColor(this.newState.getFillColor());
 		}
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.moveTo(originalState.getOrigin().getX(), originalState.getOrigin().getY());
-		oldState.setWidth(originalState.getWidth());
-		oldState.setHeight(originalState.getHeight());
-		oldState.setColor(originalState.getColor());
-		oldState.setFillColor(originalState.getFillColor());
+		this.oldState.moveTo(this.originalState.getOrigin().getX(), this.originalState.getOrigin().getY());
+		this.oldState.setWidth(this.originalState.getWidth());
+		this.oldState.setHeight(this.originalState.getHeight());
+		this.oldState.setColor(this.originalState.getColor());
+		this.oldState.setFillColor(this.originalState.getFillColor());
 	}
 	
 	@Override

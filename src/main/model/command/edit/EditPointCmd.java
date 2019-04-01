@@ -22,26 +22,26 @@ public class EditPointCmd implements Command {
 	
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
+		this.originalState = this.oldState.clone();
 		if(this.fromLog) {
 			for(Shape s : this.model.getShapes()) {
 				if(s.equals(this.oldState)) {
 					Point p = (Point) s;
 					this.oldState = p;
-					p.moveTo(newState.getX(), newState.getY());
-					p.setColor(newState.getColor());	
+					p.moveTo(this.newState.getX(), this.newState.getY());
+					p.setColor(this.newState.getColor());	
 				}
 			}
 		} else {
-			oldState.moveTo(newState.getX(), newState.getY());
-			oldState.setColor(newState.getColor());			
+			this.oldState.moveTo(this.newState.getX(), this.newState.getY());
+			this.oldState.setColor(this.newState.getColor());			
 		}
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.moveTo(originalState.getX(), originalState.getY());
-		oldState.setColor(originalState.getColor());
+		this.oldState.moveTo(this.originalState.getX(), this.originalState.getY());
+		this.oldState.setColor(this.originalState.getColor());
 	}
 	
 	@Override

@@ -132,10 +132,10 @@ public class Paint extends JFrame implements Observer {
 		this.btnSelect.setEnabled(false);
 		this.enableBringToButtons(false);
 
-		this.topCommandsPanel.setBackground(Color.black);
+		this.topCommandsPanel.setBackground(SystemColor.controlHighlight);
 		this.bottomLogPanel.setBackground(Color.red);
 		this.rightShapesPanel.setBackground(Color.yellow);
-		this.leftBringToPanel.setBackground(Color.GREEN);
+		this.leftBringToPanel.setBackground(SystemColor.controlHighlight);
 		
 		this.btnColor.setBackground(Color.BLACK);
 		this.btnFillColor.setBackground(Color.black);

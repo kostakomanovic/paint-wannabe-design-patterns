@@ -22,32 +22,32 @@ public class EditSquareCmd implements Command {
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
+		this.originalState = this.oldState.clone();
 		if (this.fromLog) {
 			for (Shape s : this.model.getShapes()) {
 				if (s.equals(this.oldState)) {
 					Square square = (Square) s;
 					this.oldState = square;
-					square.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
-					square.setWidth(newState.getWidth());
-					square.setColor(newState.getColor());
-					square.setFillColor(newState.getFillColor());
+					square.moveTo(this.newState.getOrigin().getX(), this.newState.getOrigin().getY());
+					square.setWidth(this.newState.getWidth());
+					square.setColor(this.newState.getColor());
+					square.setFillColor(this.newState.getFillColor());
 				}
 			}
 		} else {
-			oldState.moveTo(newState.getOrigin().getX(), newState.getOrigin().getY());
-			oldState.setWidth(newState.getWidth());
-			oldState.setColor(newState.getColor());
-			oldState.setFillColor(newState.getFillColor());
+			this.oldState.moveTo(this.newState.getOrigin().getX(), this.newState.getOrigin().getY());
+			this.oldState.setWidth(this.newState.getWidth());
+			this.oldState.setColor(this.newState.getColor());
+			this.oldState.setFillColor(this.newState.getFillColor());
 		}
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.moveTo(originalState.getOrigin().getX(), originalState.getOrigin().getY());
-		oldState.setWidth(originalState.getWidth());
-		oldState.setColor(originalState.getColor());
-		oldState.setFillColor(originalState.getFillColor());
+		this.oldState.moveTo(this.originalState.getOrigin().getX(), this.originalState.getOrigin().getY());
+		this.oldState.setWidth(this.originalState.getWidth());
+		this.oldState.setColor(this.originalState.getColor());
+		this.oldState.setFillColor(this.originalState.getFillColor());
 	}
 
 	@Override
