@@ -251,7 +251,7 @@ public class PaintController extends Observable {
 				if (shape.isSelected())
 					deletedShapes.add(shape);
 			}
-			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(deletedShapes, this.model);
+			DeleteShapeCmd deleteCmd = new DeleteShapeCmd(deletedShapes, this.model, false);
 			this.helpCommandExecution(deleteCmd);
 			this.emitChangesToObservers();
 			this.deselectAll();

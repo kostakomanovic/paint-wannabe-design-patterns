@@ -57,7 +57,7 @@ public class LogMapper {
 			}
 		}
 
-		return new DeleteShapeCmd(deletedShapes, model);
+		return new DeleteShapeCmd(deletedShapes, model, true);
 	}
 
 	private static Command mapLogToEditCommand(Object objLog, ShapesModel model) {

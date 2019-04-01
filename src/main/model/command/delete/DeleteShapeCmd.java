@@ -1,5 +1,6 @@
 package main.model.command.delete;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.model.ShapesModel;
@@ -10,14 +11,24 @@ public class DeleteShapeCmd implements Command {
 
 	private List<Shape> deletedShapes;
 	private ShapesModel model;
-
-	public DeleteShapeCmd(List<Shape> deletedShapes, ShapesModel model) {
+	private boolean fromLog;
+	
+	public DeleteShapeCmd(List<Shape> deletedShapes, ShapesModel model, boolean fromLog) {
 		this.model = model;
 		this.deletedShapes = deletedShapes;
 	}
 
 	@Override
 	public void execute() {
+		if(this.fromLog) {			
+			for(Shape deleted : this.deletedShapes) {
+				for(Shape shape : this.model.getShapes()) {
+					if(deleted.equals(shape)) {
+						deleted = shape;
+					}
+				}
+			}
+		}
 		for (Shape shape : this.deletedShapes) {
 			this.model.getShapes().remove(shape);
 		}
