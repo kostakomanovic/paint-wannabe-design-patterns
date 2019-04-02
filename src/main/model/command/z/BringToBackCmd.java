@@ -25,7 +25,7 @@ public class BringToBackCmd implements Command {
 	@Override
 	public void unexecute() {
 		this.model.getShapes().remove(this.shape);
-		this.model.getShapes().add(this.shape);
+		this.model.getShapes().add(this.currentIndex, this.shape);
 	}
 
 	@Override

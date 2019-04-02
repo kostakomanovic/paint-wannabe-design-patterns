@@ -27,7 +27,7 @@ public class BringToFrontCmd implements Command {
 	@Override
 	public void unexecute() {
 		this.model.getShapes().remove(this.shape);
-		this.model.getShapes().add(0, this.shape);
+		this.model.getShapes().add(this.currentIndex, this.shape);
 	}
 
 	@Override

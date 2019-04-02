@@ -195,6 +195,11 @@ public class PaintController extends Observable {
 	 */
 	public void handleToFront() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		if(this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
+			JOptionPane.showMessageDialog(this.paint, "Cannot move this shape to front since it is already the last shape!", "Error!",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		ToFrontCmd command = new ToFrontCmd(selectedShape, this.model);
 		this.helpCommandExecution(command);
 	}
@@ -204,6 +209,11 @@ public class PaintController extends Observable {
 	 */
 	public void handleToBack() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		if(this.model.getShapes().indexOf(selectedShape) == 0) {
+			JOptionPane.showMessageDialog(this.paint, "Cannot move this shape to back since it is already the first shape!", "Error!",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		ToBackCmd command = new ToBackCmd(selectedShape, this.model);
 		this.helpCommandExecution(command);
 	}
@@ -212,7 +222,13 @@ public class PaintController extends Observable {
 	 * Handles bring to front command
 	 */
 	public void handleBringToFront() {
-		BringToFrontCmd command = new BringToFrontCmd(this.model, this.currentCommandIndex);
+		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		BringToFrontCmd command = new BringToFrontCmd(this.model, this.model.getShapes().indexOf(selectedShape));
+		if(this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
+			JOptionPane.showMessageDialog(this.paint, "Cannot bring this shape to front since it is already the last shape!", "Error!",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		this.helpCommandExecution(command);
 	}
 
@@ -220,7 +236,13 @@ public class PaintController extends Observable {
 	 * Handles bring to front command
 	 */
 	public void handleBringToBack() {
-		BringToBackCmd command = new BringToBackCmd(this.model, this.currentCommandIndex);
+		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
+		BringToBackCmd command = new BringToBackCmd(this.model,this.model.getShapes().indexOf(selectedShape));
+		if(this.model.getShapes().indexOf(selectedShape) == 0) {
+			JOptionPane.showMessageDialog(this.paint, "Cannot bring this shape to back since it is already the first shape!", "Error!",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		this.helpCommandExecution(command);
 	}
 

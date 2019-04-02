@@ -1,6 +1,5 @@
 package main.model.command.delete;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import main.model.ShapesModel;
