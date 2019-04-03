@@ -61,7 +61,6 @@ public class PaintController extends Observable {
 
 	private Point lineStartPoint;
 
-	// TODO add constants
 	private String mode = PaintMode.NORMAL;
 
 	public PaintController(ShapesModel model, Paint paint) {
@@ -182,10 +181,15 @@ public class PaintController extends Observable {
 	@SuppressWarnings("unchecked")
 	public void handleLoadCanvas() {
 		JFileChooser jFileChooser = new JFileChooser();
-		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+		if (jFileChooser.showOpenDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadShapes());
-			this.model.setShapes(
-					(List<Shape>) (Object) loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath()));
+			this.refreshCanvasAndLog();
+			
+			for(Object obj : loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath())) {
+				Shape shape = (Shape) obj;
+				this.model.getShapes().add(shape);
+				this.repaint();
+			}
 			this.repaint();
 		}
 	}
@@ -251,7 +255,7 @@ public class PaintController extends Observable {
 	 */
 	public void handleLoadLog() {
 		JFileChooser jFileChooser = new JFileChooser();
-		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
+		if (jFileChooser.showOpenDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadLog());
 			this.refreshCanvasAndLog();
 			this.commands = LogMapper
@@ -293,7 +297,6 @@ public class PaintController extends Observable {
 		}
 
 		Collections.reverse(this.model.getShapes());
-
 		this.emitChangesToObservers();
 		this.repaint();
 	}

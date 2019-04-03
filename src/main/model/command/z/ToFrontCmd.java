@@ -35,7 +35,7 @@ public class ToFrontCmd implements Command {
 	@Override
 	public String toString() {
 		// command,shape
-		return "toftont," + this.shape;
+		return "toftont|" + this.shape;
 	}
 
 }

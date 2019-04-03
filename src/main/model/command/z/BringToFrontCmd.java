@@ -33,6 +33,6 @@ public class BringToFrontCmd implements Command {
 	@Override
 	public String toString() {
 		// command,shape
-		return "bringtofront," + this.shape;
+		return "bringtofront|" + this.shape;
 	}
 }

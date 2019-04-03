@@ -2,9 +2,15 @@ package main.model.shape.base;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public abstract class Shape implements Cloneable {
+public abstract class Shape implements Cloneable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6941301878779242233L;
+	
 	protected Color color;
 	protected boolean selected = false;
 
