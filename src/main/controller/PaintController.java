@@ -184,11 +184,13 @@ public class PaintController extends Observable {
 		if (jFileChooser.showOpenDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			LoadManager loadManager = new LoadManager(new LoadShapes());
 			this.refreshCanvasAndLog();
-			
+			this.commands.clear();
+			this.paint.getLogListModel().clear();
+			this.setUndoRedoNavigation();
+			this.repaint();
 			for(Object obj : loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath())) {
 				Shape shape = (Shape) obj;
 				this.model.getShapes().add(shape);
-				this.repaint();
 			}
 			this.repaint();
 		}
