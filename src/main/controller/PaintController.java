@@ -361,7 +361,6 @@ public class PaintController extends Observable {
 
 		}
 
-		this.deselectAll();
 		this.emitChangesToObservers();
 		this.repaint();
 	}
