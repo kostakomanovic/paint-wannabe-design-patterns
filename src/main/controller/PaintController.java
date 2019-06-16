@@ -162,7 +162,8 @@ public class PaintController extends Observable {
 		JFileChooser jFileChooser = new JFileChooser();
 		if (jFileChooser.showSaveDialog(paint) == JFileChooser.APPROVE_OPTION) {
 			SaveManager saveManager = new SaveManager(new SaveLog());
-			saveManager.save(new ArrayList<Object>(Collections.list(this.paint.getLogListModel().elements())), jFileChooser.getSelectedFile().getAbsolutePath());
+			saveManager.save(new ArrayList<Object>(Collections.list(this.paint.getLogListModel().elements())),
+					jFileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 
@@ -188,7 +189,7 @@ public class PaintController extends Observable {
 			this.paint.getLogListModel().clear();
 			this.setUndoRedoNavigation();
 			this.repaint();
-			for(Object obj : loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath())) {
+			for (Object obj : loadManager.load(jFileChooser.getSelectedFile().getAbsolutePath())) {
 				Shape shape = (Shape) obj;
 				this.model.getShapes().add(shape);
 			}
@@ -201,8 +202,9 @@ public class PaintController extends Observable {
 	 */
 	public void handleToFront() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
-		if(this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
-			JOptionPane.showMessageDialog(this.paint, "Cannot move this shape to front since it is already the last shape!", "Error!",
+		if (this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
+			JOptionPane.showMessageDialog(this.paint,
+					"Cannot move this shape to front since it is already the last shape!", "Error!",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -215,8 +217,9 @@ public class PaintController extends Observable {
 	 */
 	public void handleToBack() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
-		if(this.model.getShapes().indexOf(selectedShape) == 0) {
-			JOptionPane.showMessageDialog(this.paint, "Cannot move this shape to back since it is already the first shape!", "Error!",
+		if (this.model.getShapes().indexOf(selectedShape) == 0) {
+			JOptionPane.showMessageDialog(this.paint,
+					"Cannot move this shape to back since it is already the first shape!", "Error!",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -230,8 +233,9 @@ public class PaintController extends Observable {
 	public void handleBringToFront() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
 		BringToFrontCmd command = new BringToFrontCmd(this.model, this.model.getShapes().indexOf(selectedShape));
-		if(this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
-			JOptionPane.showMessageDialog(this.paint, "Cannot bring this shape to front since it is already the last shape!", "Error!",
+		if (this.model.getShapes().indexOf(selectedShape) == this.model.getShapes().size() - 1) {
+			JOptionPane.showMessageDialog(this.paint,
+					"Cannot bring this shape to front since it is already the last shape!", "Error!",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -243,9 +247,10 @@ public class PaintController extends Observable {
 	 */
 	public void handleBringToBack() {
 		Shape selectedShape = ShapesModelHelper.getSelectedShape(this.model.getShapes());
-		BringToBackCmd command = new BringToBackCmd(this.model,this.model.getShapes().indexOf(selectedShape));
-		if(this.model.getShapes().indexOf(selectedShape) == 0) {
-			JOptionPane.showMessageDialog(this.paint, "Cannot bring this shape to back since it is already the first shape!", "Error!",
+		BringToBackCmd command = new BringToBackCmd(this.model, this.model.getShapes().indexOf(selectedShape));
+		if (this.model.getShapes().indexOf(selectedShape) == 0) {
+			JOptionPane.showMessageDialog(this.paint,
+					"Cannot bring this shape to back since it is already the first shape!", "Error!",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -355,7 +360,8 @@ public class PaintController extends Observable {
 			EditHexagonDialog dialog = new EditHexagonDialog(hexagon);
 			dialog.setVisible(true);
 			if (dialog.getEditedShape() != null) {
-				Command command = new EditHexagonAdapterCmd(hexagon, (HexagonAdapter)dialog.getEditedShape(), null, false);
+				Command command = new EditHexagonAdapterCmd(hexagon, (HexagonAdapter) dialog.getEditedShape(), null,
+						false);
 				this.helpCommandExecution(command);
 			}
 
@@ -393,15 +399,20 @@ public class PaintController extends Observable {
 
 	private void helpCommandExecution(Command command) {
 		command.execute();
+		if (this.currentCommandIndex == this.commands.size() - 1) {
+			this.currentCommandIndex++;
+		} else {
+			this.currentCommandIndex = this.commands.size();
+		}
 		this.commands.add(command);
-		this.currentCommandIndex++;
 		this.paint.getLogListModel().addElement(String.valueOf(this.commands.get(this.currentCommandIndex)));
 		this.setUndoRedoNavigation();
 	}
 
 	public void undo() {
 		this.commands.get(this.currentCommandIndex).unexecute();
-		this.paint.getLogListModel().remove(this.paint.getLogListModel().size() - 1);
+//		this.paint.getLogListModel().remove(this.paint.getLogListModel().size() - 1);
+		this.paint.getLogListModel().addElement("UNDO:" + String.valueOf(this.commands.get(this.currentCommandIndex)));
 		this.currentCommandIndex--;
 		this.setUndoRedoNavigation();
 		this.repaint();
@@ -410,7 +421,7 @@ public class PaintController extends Observable {
 	public void redo() {
 		this.currentCommandIndex++;
 		this.commands.get(currentCommandIndex).execute();
-		this.paint.getLogListModel().addElement(String.valueOf(this.commands.get(this.currentCommandIndex)));
+		this.paint.getLogListModel().addElement("REDO: " + String.valueOf(this.commands.get(this.currentCommandIndex)));
 		this.setUndoRedoNavigation();
 		this.repaint();
 	}
